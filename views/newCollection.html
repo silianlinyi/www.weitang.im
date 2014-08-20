@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>微糖</title>
+
+		<link rel="stylesheet" type="text/css" href="/css/semantic.css" />
+		<link rel="stylesheet" type="text/css" href="/css/common.css" />
+		<link rel="stylesheet" href="/css/newCollection.css" />
+
+		<script>
+			var QINIU_Domain = "{{ QINIU_Domain }}";
+		</script>
+	</head>
+	<body class="collections page">
+
+		{{> menu }}
+
+		<div class="ui two column page grid">
+			<div class="column">
+				<div class="ui raised form segment newCollectionForm">
+					<h3 class="ui black header">新建专题</h3>
+					<div class="field">
+						<div class="ui left labeled icon input">
+							<input type="text" placeholder="专题名：不超过20个字" id="name">
+							<i class="grid layout icon"></i>
+						</div>
+					</div>
+					<div class="field">
+						<textarea placeholder="专题描述：不超过100个字" id="description"></textarea>
+					</div>
+					<div class="inline field" id="container">
+						<div class="ui button" id="pickfiles">
+							上传专题封面
+						</div>
+					</div>
+					<div class="inline field" id="tagList"></div>
+					<div class="field">
+						<div class="ui action input">
+							<input type="text" placeholder="" id="tag">
+							<div class="ui button" id="addTagBtn">
+								添加标签
+							</div>
+						</div>
+					</div>
+					<div class="field">
+						<i class="icon info"></i>每个用户最多可以创建5个专题，每个专题最多添加5个标签
+					</div>
+					<div class="ui green fluid submit button" id="createBtn">
+						创建专题
+					</div>
+				</div>
+			</div>
+			<div class="column">
+				<div class="ui items">
+					<div class="item collection">
+						<div class="ui rounded image">
+							<i class="icon massive photo"></i>
+							<!--<img src="/img/highres.jpg">-->
+						</div>
+						<div class="content">
+							<div class="name"></div>
+							<p class="description"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="/lib/modernizr.js"></script>
+		<script src="/lib/jquery.js"></script>
+		<script src="/lib/semantic.js"></script>
+		<script src="/lib/jquery.qrcode.min.js"></script>
+		<script src="/plupload/plupload.full.min.js"></script>
+		<script src="/lib/qiniu.js"></script>
+
+		<script data-main="/js/newCollection" src="/lib/require.js"></script>
+
+	</body>
+</html>

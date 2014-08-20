@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>微糖</title>
+
+		<link rel="stylesheet" href="/css/semantic.css" />
+		<link rel="stylesheet" href="/css/common.css" />
+		<link rel="stylesheet" href="/css/settings.css" />
+		<script>
+			var QINIU_Domain = "{{ QINIU_Domain }}";
+		</script>
+	</head>
+	<body class="index page">
+
+		{{> menu }}
+
+		<div class="ui page grid">
+			<div class="ui basic segment">
+				<div class="ui black huge center aligned header">
+					<i class="icon settings"></i>设置
+				</div>
+			</div>
+
+			<div class="ui tabular menu">
+				<a class="active item" href="/settings">
+					个人资料
+				</a>
+				<a class="item" href="/settings/password">
+					修改密码
+				</a>
+			</div>
+
+			<div class="ui raised form segment">
+				{{#if u.headimgurl}}
+					<img src="{{ u.headimgurl }}" class="rounded ui image headimgurl" width="140" height="140" id="headimgurl" data-headimgurl="{{u.headimgurl}}" data-sHeadimgurl="{{u.sHeadimgurl}}" />
+				{{else}}
+					<img src="/img/default_avatar.png" class="rounded ui image headimgurl" width="140" height="140" id="headimgurl" data-headimgurl="" data-sHeadimgurl="" />
+				{{/if}}
+				
+				<div class="inline field" id="container">
+					<label>头像：</label>
+					<div class="ui green button" id="pickfiles">
+						上传头像
+					</div>
+				</div>
+				<div class="inline field">
+					<label>邮箱：</label>
+					<span>{{u.email}}</span>
+				</div>
+				<div class="inline field">
+					<label>昵称：</label>
+					<input type="text" id="nickname" value="{{u.nickname}}" />
+				</div>
+				<div class="inline field">
+					<label>性别：</label>
+					<div class="ui selection dropdown" id="sexDropdown">
+						<input type="hidden" name="gender" id="sex" value="{{u.sex}}">
+						<div class="default text">
+							未知
+						</div>
+						<i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="item" data-value="1">
+								男
+							</div>
+							<div class="item" data-value="2">
+								女
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="inline field">
+					<label for="">地区：</label>
+					<div class="ui selection dropdown" id="provinceDropdown">
+						<input type="hidden" name="gender" id="province" value="{{u.province}}">
+						<div class="default text">
+							请选择
+						</div>
+						<i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="item" data-value="北京">北京</div>
+							<div class="item" data-value="天津">天津</div>
+							<div class="item" data-value="上海">上海</div>
+							<div class="item" data-value="重庆">重庆</div>
+							<div class="item" data-value="河北省">河北省</div>
+							<div class="item" data-value="山西省">山西省</div>
+							<div class="item" data-value="辽宁省">辽宁省</div>
+							<div class="item" data-value="吉林省">吉林省</div>
+							<div class="item" data-value="黑龙江省">黑龙江省</div>
+							<div class="item" data-value="江苏省">江苏省</div>
+							<div class="item" data-value="浙江省">浙江省</div>
+							<div class="item" data-value="安徽省">安徽省</div>
+							<div class="item" data-value="福建省">福建省</div>
+							<div class="item" data-value="江西省">江西省</div>
+							<div class="item" data-value="山东省">山东省</div>
+							<div class="item" data-value="河南省">河南省</div>
+							<div class="item" data-value="湖北省">湖北省</div>
+							<div class="item" data-value="湖南省">湖南省</div>
+							<div class="item" data-value="广东省">广东省</div>
+							<div class="item" data-value="海南省">海南省</div>
+							<div class="item" data-value="四川省">四川省</div>
+							<div class="item" data-value="贵州省">贵州省</div>
+							<div class="item" data-value="云南省">云南省</div>
+							<div class="item" data-value="陕西省">陕西省</div>
+							<div class="item" data-value="甘肃省">甘肃省</div>
+							<div class="item" data-value="青海省">青海省</div>
+							<div class="item" data-value="台湾省">台湾省</div>
+							<div class="item" data-value="西藏自治区">西藏自治区</div>
+							<div class="item" data-value="广西壮族自治区">广西壮族自治区</div>
+							<div class="item" data-value="内蒙古自治区">内蒙古自治区</div>
+							<div class="item" data-value="宁夏回族自治区">宁夏回族自治区</div>
+							<div class="item" data-value="新疆维吾尔自治区">新疆维吾尔自治区</div>
+							<div class="item" data-value="香港特别行政区">香港特别行政区</div>
+							<div class="item" data-value="澳门特别行政区">澳门特别行政区</div>
+						</div>
+					</div>
+
+					<div class="ui selection dropdown" id="cityDropdown">
+						<input type="hidden" name="gender" value="{{u.city}}" id="city">
+						<div class="default text">
+							请选择
+						</div>
+						<i class="dropdown icon"></i>
+						<div class="menu"></div>
+					</div>
+				</div>
+				<div class="inline field">
+					<label>手机号：</label>
+					<input type="text" id="phone" value="{{u.phone}}" />
+				</div>
+				<div class="inline field">
+					<label>QQ：</label>
+					<input type="text" id="qq" value="{{u.qq}}" />
+				</div>
+				<div class="inline field">
+					<label>个人网站：</label>
+					<input type="text" id="url" value="{{u.url}}" />
+				</div>
+
+				<div class="inline field">
+					<label for="">个性简介：</label>
+					<textarea style="width: 450px;" id="intro">{{u.intro}}</textarea>
+				</div>
+
+				<div class="inline field">
+					<label></label>
+					<div class="ui blue button" id="saveBtn">
+						保存修改
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<script src="/lib/modernizr.js"></script>
+		<script src="/lib/jquery.js"></script>
+		<script src="/lib/semantic.js"></script>
+		<script src="/lib/jquery.qrcode.min.js"></script>
+		<script src="/plupload/plupload.full.min.js"></script>
+		<script src="/lib/qiniu.js"></script>
+		<script data-main="/js/settingsIndex" src="/lib/require.js"></script>
+
+	</body>
+</html>

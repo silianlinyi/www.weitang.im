@@ -1,0 +1,95 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>微糖</title>
+
+		<link rel="stylesheet" type="text/css" href="/css/semantic.css" />
+		<link rel="stylesheet" type="text/css" href="/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/css/sign.css" />
+		
+	</head>
+	<body class="signIn page">
+
+		{{> menu }}
+
+		<div class="ui two column page grid">
+			<div class="column left-column">
+				<div class="ui form segment">
+					<h3 class="ui black header">登录微糖</h3>
+					<div class="field">
+						<div class="ui left labeled icon input">
+							<input type="text" placeholder="邮箱" id="email">
+							<i class="user icon"></i>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui left labeled icon input">
+							<input type="password" placeholder="密码" id="password">
+							<i class="lock icon"></i>
+						</div>
+					</div>
+					<div class="inline field">
+						<div class="ui checkbox">
+							<input type="checkbox" id="remember">
+							<label for="remember">记住我</label>
+						</div>
+						<a href="" class="forget-password">忘记密码？</a>
+					</div>
+					<div class="ui red fluid submit button" id="loginBtn">
+						登&nbsp;&nbsp;&nbsp;&nbsp;录
+					</div>
+					<div class="ui error message" id="message"></div>
+					<div class="ui horizontal icon divider">
+						<i class="leaf icon"></i>
+					</div>
+					
+					<div class="inline field login-sns">
+						<label for="">第三方帐号登录：</label>
+						<a href="/login/weibo" title="使用微博登录">
+							<i class="black large red weibo icon"></i>
+						</a>
+						<a href="/login/github" title="使用Github登录">
+							<i class="github large red sign icon"></i>
+						</a>
+						<a href="/login/renren" title="使用人人登录">
+							<i class="renren large red icon"></i>
+						</a>
+						<a href="/login/pinterest" title="使用Pinterest登录">
+							<i class="pinterest sign large red icon"></i>
+						</a>
+						<a href="/login/linkedin" title="使用Linkedin登录">
+							<i class="linkedin sign large red icon"></i>
+						</a>
+						<a href="/login/google" title="使用Google Plus登录">
+							<i class="google plus sign large red icon"></i>
+						</a>
+						<a href="/login/facebook" title="使用Facebook登录">
+							<i class="facebook sign large red icon"></i>
+						</a>
+						<a href="/login/twitter" title="使用Twitter登录">
+							<i class="twitter sign large red icon"></i>
+						</a>
+					</div>
+					<p>还没有帐号？<a href="/signUp">立即注册</a></p>
+				</div>
+				
+			</div>
+			<div class="column qrcode-column">
+				<div class="qrcode"></div>
+				<div class="ui black header">“扫一扫”用手机登录</div>
+			</div>
+		</div>
+		
+		
+		<script src="/lib/modernizr.js"></script>
+		<script src="/lib/jquery.js"></script>
+		<script src="/lib/semantic.js"></script>
+		<script src="/lib/jquery.qrcode.min.js"></script>
+		<script src="/lib/md5.js"></script>
+		<script src="/lib/url.js"></script>
+		<script data-main="/js/signIn" src="/lib/require.js"></script>
+		
+	</body>
+</html>

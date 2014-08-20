@@ -1,0 +1,153 @@
+<style>
+	.loginModal.ui.modal > .header {
+		padding: 15px;
+		font-size: 16px;
+		background: #eee;
+	}
+	.loginModal.ui.modal > .content {
+		background: #FFFFFF;
+	}
+	.loginModal.ui.modal > .close {
+		right: 0px;
+		top: 10px;
+		color: rgb(83, 83, 83);
+	}
+	.loginModal.ui.modal a {
+		text-decoration: none;
+	}
+	.ui.dimmer {
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+</style>
+<div class="ui modal loginModal" id="loginModal">
+	<i class="close icon"></i>
+	<div class="header">
+		登录
+	</div>
+	<div class="content">
+		<div class="ui basic form segment">
+			<div class="field">
+				<div class="ui left labeled icon input">
+					<input type="text" placeholder="邮箱" id="email">
+					<i class="user icon"></i>
+				</div>
+			</div>
+			<div class="field">
+				<div class="ui left labeled icon input">
+					<input type="password" placeholder="密码" id="password">
+					<i class="lock icon"></i>
+				</div>
+			</div>
+			<div class="inline field">
+				<div class="ui checkbox">
+					<input type="checkbox" id="remember">
+					<label for="remember">记住我</label>
+				</div>
+				<a href="" class="forget-password">
+					忘记密码？
+				</a>
+			</div>
+			<div class="ui red fluid submit button" id="loginBtn">
+				登&nbsp;&nbsp;&nbsp;&nbsp;录
+			</div>
+			<div class="ui error message" id="message"></div>
+			<div class="ui horizontal icon divider">
+				<i class="leaf icon"></i>
+			</div>
+
+			<div class="inline field login-sns">
+				<label for="">第三方帐号登录：</label>
+				<a href="/login/weibo" title="使用微博登录">
+					<i class="black large red weibo icon"></i>
+				</a>
+				<a href="/login/github" title="使用Github登录">
+					<i class="github large red sign icon"></i>
+				</a>
+				<a href="/login/renren" title="使用人人登录">
+					<i class="renren large red icon"></i>
+				</a>
+				<a href="/login/pinterest" title="使用Pinterest登录">
+					<i class="pinterest sign large red icon"></i>
+				</a>
+				<a href="/login/linkedin" title="使用Linkedin登录">
+					<i class="linkedin sign large red icon"></i>
+				</a>
+				<a href="/login/google" title="使用Google Plus登录">
+					<i class="google plus sign large red icon"></i>
+				</a>
+				<a href="/login/facebook" title="使用Facebook登录">
+					<i class="facebook sign large red icon"></i>
+				</a>
+				<a href="/login/twitter" title="使用Twitter登录">
+					<i class="twitter sign large red icon"></i>
+				</a>
+			</div>
+			<p>
+				还没有帐号？
+				<a href="/signUp">
+					立即注册
+				</a>
+			</p>
+		</div>
+	</div>
+</div>
+<script src="/lib/md5.js"></script>
+<script>
+	$(function() {
+
+		$('body').on('click', '.notLogin', function() {
+			$('#loginModal').modal('show');
+		});
+
+		var $email = $('#email');
+		var $password = $('#password');
+		var $message = $('#message');
+		var $loginBtn = $('#loginBtn');
+
+		$loginBtn.on('click', function() {
+			var email = $email.val().trim();
+			var password = $password.val().trim();
+
+			if (!email) {
+				$message.html('<i class="attention icon"></i>邮箱不能为空').show();
+				$email.focus();
+				return;
+			}
+			if (!password) {
+				$message.html('<i class="attention icon"></i>密码不能为空').show();
+				$password.focus();
+				return;
+			}
+
+			$.ajax({
+				url : '/api/signIn',
+				type : 'POST',
+				data : {
+					email : email,
+					password : hex_md5(password)
+				},
+				dataType : 'json',
+				timeout : 15000,
+				success : function(data) {
+					console.log(data);
+					if (data.r === 0) {
+						window.location.reload();
+					} else {
+						$message.html('<i class="attention icon"></i>' + data.msg).show();
+						return;
+					}
+				}
+			});
+
+		});
+
+		$('body').keydown(function(e) {
+			if (e.keyCode === 13) {
+				$loginBtn.click();
+			}
+		});
+
+		
+
+	}); 
+</script>

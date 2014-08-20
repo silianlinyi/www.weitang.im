@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>微糖</title>
+
+		<link rel="stylesheet" type="text/css" href="/css/semantic.css" />
+		<link rel="stylesheet" type="text/css" href="/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/css/sign.css" />
+		<style type="text/css">
+			.ui.page.grid {
+				font-size: 1em;
+			}
+			canvas {
+				position: fixed;
+				left: 0;
+				top: 0;
+			}
+			.tip {
+				position: absolute;
+				top: 10%;
+				left: 50%;
+				z-index: 999;
+				margin-left: -140px !important;
+			}
+		</style>
+	</head>
+	<body class="registerSucc page">
+
+		{{> menu }}
+
+		<div class="ui large center aligned header black tip">
+			注册成功
+			<div class="ui sub header">3秒后页面将自动跳转，如果没有跳转，<br /><a href="/">请点击链接</a></div>
+		</div>
+		<canvas id="bg" width="" height=""></canvas>
+		<script src="/lib/modernizr.js"></script>
+		<script src="/lib/jquery.js"></script>
+		<script src="/lib/semantic.js"></script>
+		<script src="/lib/jquery.qrcode.min.js"></script>
+		<script data-main="/js/registerSucc" src="/lib/require.js"></script>
+	</body>
+</html>
+

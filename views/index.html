@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>微糖</title>
+
+		<link rel="stylesheet" href="/css/semantic.css" />
+		<link rel="stylesheet" href="/css/common.css" />
+	</head>
+	<body class="index page">
+
+		{{> menu }}
+
+		<div class="ui grid">
+			<div class="four wide column">
+				<div class="cover-img"></div>
+			</div>
+			<div class="nine wide column">
+				<div class="ui basic segment search-box">
+					<span>微糖 · 最文艺的IT博客平台</span>
+					<div class="ui small icon input">
+						<input type="text" placeholder="搜索...">
+						<i class="search icon"></i>
+					</div>
+				</div>
+				<div class="ui divider" style="margin-top: 0px;"></div>
+				<div class="ui basic segment">
+					<ul id="articleList"></ul>
+				</div>
+				<div class="ui basic center aligned segment">
+					<div class="ui red button" id="loadMore">
+						点击查看更多
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="/lib/modernizr.js"></script>
+		<script src="/lib/jquery.js"></script>
+		<script src="/lib/semantic.js"></script>
+		<script src="/lib/jquery.qrcode.min.js"></script>
+		<script data-main="/js/index" src="/lib/require.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,48 @@
+
+.collection-page .collection.item {
+    text-align: center;
+    min-height: initial;
+    transition:All 0.4s ease-in-out;
+    -webkit-transition:All 0.4s ease-in-out;
+    -moz-transition:All 0.4s ease-in-out;
+    -o-transition:All 0.4s ease-in-out;
+    text-decoration: none;
+}
+.collection-page .collection.item .name {
+    font-size: 1.1em !important;
+}
+/* 屏幕分别率小于640像素 */
+@media only screen and (max-width: 320px) {
+    .collection-page .collection.item {
+        width: 100%;
+        height: 330px;
+        margin: 0 0 2% 0;
+    }
+}
+/* 屏幕分别率小于640像素 */
+@media only screen and (min-width: 321px) and (max-width: 640px) {
+    .collection-page .collection.item {
+        width: 48%;
+        height: 320px;
+        margin: 0 2% 2% 0;
+    }
+}
+/* 屏幕分别率大于640像素，小于1366像素 */
+@media only screen and (min-width: 641px) and (max-width: 1366px) {
+    .collection-page .collection.item {
+        width: 30.5%;
+        height: 280px;
+        margin: 0 2% 2% 0;
+    }
+}
+/* 屏幕分别率大于1366像素 */
+@media only screen and (min-width: 1367px) {
+    .collection-page .collection.item {
+        width: 23%;
+        height: 290px;
+        margin: 0 2% 2% 0;
+    }
+    .collection-page .collection.item img {
+        height: 170px;
+    }
+}

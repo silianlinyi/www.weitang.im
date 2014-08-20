@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>微糖</title>
+
+		<link rel="stylesheet" type="text/css" href="/css/semantic.css" />
+		<link rel="stylesheet" type="text/css" href="/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="/css/collection.css" />
+		<style>
+			.nine.column .tip {
+				font-weight: normal;
+				display: none;
+			}
+		</style>
+	</head>
+	<body class="collection-page">
+
+		{{> menu }}
+
+		<div class="ui grid">
+			<div class="four wide column">
+				<div class="cover-img"></div>
+			</div>
+			<div class="nine wide column">
+				<div class="ui secondary red pointing menu">
+					<a class="active item" href="/collections/sub">
+						我的订阅
+					</a>
+					<a class="item" href="/collections/mine">
+						我的专题
+					</a>
+					<a class="item" href="/collections">
+						全部专题
+					</a>
+				</div>
+
+				<div class="ui basic segment">
+					<div class="ui black header tip">您还没有订阅任何专题，订阅一些感兴趣的专题，开始阅读优秀的文章吧。</div>
+					<div class="ui items" id="collectionList"></div>
+				</div>
+
+			</div>
+		</div>
+
+		<script src="/lib/modernizr.js"></script>
+		<script src="/lib/jquery.js"></script>
+		<script src="/lib/semantic.js"></script>
+		<script src="/lib/jquery.qrcode.min.js"></script>
+
+		<script data-main="/js/mySubCollections" src="/lib/require.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,221 @@
+body {
+    -webkit-user-select: none;
+}
+.write.page .ui.grid {
+    height: 100%;
+}
+.write.page .ui.grid .column {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+/* left */
+.write.page .left.column {
+    width: 15% !important;
+}
+.left .new-notebook-btn {
+    font-weight: normal;
+    padding: 10px 0px 10px 15px !important;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 !important;
+}
+.left .new-notebook-form {
+    padding: 10px;
+    display: none;
+}
+.left .new-notebook-form .field {
+    margin-bottom: 10px;
+}
+
+.new-notebook-form .ui.button {
+    width: 47.5%;
+    margin: 0;
+}
+.new-notebook-form .ui.button:first-child {
+    margin-right: 5%;
+}
+.write.page .left .list {
+    margin: 0;
+    height: 80%;
+    overflow-y: auto;
+}
+.left .list .active.item {
+    background-color: #e58c7c !important;
+    color: #fff !important;
+}
+.left .list .active.item i {
+    color: #FFF;
+}
+.write.page .left .list .item {
+    color: #666;
+    padding: 12px 5px 12px 10px;
+    line-height: 1.1em;
+    height: 1.1em;
+    position: relative;
+}
+.write.page .left .list .item .content {
+    width: 120px;
+    display: inherit;
+    position: absolute;
+    left: 35px;
+    width: 70%;
+}
+.left i.edit, .left i.trash {
+    margin-right: 0 !important;
+    float: right !important;
+    visibility: hidden;
+}
+.left .item.active i.edit, .left .item.active i.trash {
+    visibility: visible;
+}
+/* end left */
+
+/* middle */
+.middle.column {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-box-shadow: inset 0 0 20px rgba(0,0,0,0.13);
+    -moz-box-shadow: inset 0 0 20px rgba(0,0,0,0.13);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.13);
+}
+.middle .new-article-btn {
+    font-weight: normal;
+    padding: 10px 0px 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0;
+}
+.middle .list {
+    margin: 0;
+}
+.middle .list .item {
+    padding: 15px 5px 15px 10px !important;
+    position: relative;
+    border-bottom: 1px solid #d9d9d9;
+    text-decoration: none;
+}
+.middle .list .item.active {
+    color: #fff !important;
+    background-color: #d1c091 !important;
+    -webkit-box-shadow: inset 0px 0px 10px rgba(0,0,0,0.2);
+    -moz-box-shadow: inset 0px 0px 10px rgba(0,0,0,0.2);
+    box-shadow: inset 0px 0px 10px rgba(0,0,0,0.2);
+    -webkit-transition: background-color 0.3s linear;
+    -moz-transition: background-color 0.3s linear;
+    -o-transition: background-color 0.3s linear;
+    transition: background-color 0.3s linear;
+}
+.middle .list .item.active i {
+    color: #fff;
+}
+.middle .list .item .content {
+    display: block !important;
+    width: 70%;
+    padding-left: 40px;
+    color: #666;
+}
+.middle .list .item.active .content {
+    color: #eee;
+}
+.middle .list .item .header {
+    font-size: 18px;
+    font-weight: normal;
+    height: 1.2em;
+    line-height: 1.2em;
+}
+.middle .list .item .content p {
+    margin-top: 5px;
+    margin-bottom: 0;
+    font-size: 12px;
+    white-space: nowrap;
+}
+.middle i.file {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+}
+.middle i.setting, .middle i.trash {
+    position: absolute;
+    margin: 0 !important;
+    top: 30px;
+    visibility: hidden;
+}
+.middle i.setting {
+    right: 30px;    
+}
+.middle i.trash {
+    right: 10px;
+}
+.middle .active.item i.setting, .middle .active.item i.trash {
+    visibility: visible;
+}
+/* end middle */
+
+/* right */
+.right {
+    position: relative;
+}
+.right .mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #eee;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    text-align: center;
+}
+.right .mask span {
+    color: #CADAD9;
+    font-size: 64px;
+    position: absolute;
+    top: 50%;
+    margin-top: -39px;
+    font-family: "楷体","隶书";
+}
+.right .ui.input {
+    width: 100%;
+}
+.right input {
+    border: none !important;
+}
+.toolbar {
+    margin: 0;
+    padding: 0 0 0 10px;
+    list-style-type: none;
+    background-color: #dedede;
+    height: 44px;
+}
+.toolbar li {
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px 5px;
+    color: #666;
+}
+.toolbar li i {
+    margin: 0;
+}
+.toolbar li:hover {
+    background: #484848;
+    background-color: #3b3b3b;
+    color: white;
+    background-color: #484848;
+    background-image: -moz-linear-gradient(top, #525252, #3b3b3b);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#525252), to(#3b3b3b));
+    background-image: -webkit-linear-gradient(top, #525252, #3b3b3b);
+    background-image: -o-linear-gradient(top, #525252, #3b3b3b);
+    background-image: linear-gradient(to bottom, #525252, #3b3b3b);
+    background-repeat: repeat-x;
+}
+.toolbar #publishBtn, .toolbar #unPublishBtn {
+    display: none;
+}
+/* end right */
+
+.modal {
+    margin-top: -150px !important;
+}
+.ui.dimmer {
+    background-color: rgba(0, 0, 0, 0.65);
+}

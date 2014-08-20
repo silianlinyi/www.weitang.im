@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>{{article.title}} | 微糖</title>
+
+		<link rel="stylesheet" href="/css/semantic.css" />
+		<link rel="stylesheet" href="/css/common.css" />
+		<link rel="stylesheet" href="/css/articleInfo.css" />
+		<link rel="stylesheet" href="/epiceditor/themes/base/epiceditor.css" />
+		<link rel="stylesheet" href="/epiceditor/themes/preview/github.css" />
+	</head>
+	<body class="articleInfo page">
+
+		{{> menu }}
+
+		<div class="ui page grid main">
+			<div class="three wide column left">
+				<a href="/users/{{article.belongToUserId._id}}">
+					<img class="circular ui small right floated image" src="{{article.belongToUserId.sHeadimgurl}}">
+				</a>
+				<div class="ui right aligned header">
+					<a href="/users/{{article.belongToUserId._id}}">
+						{{article.belongToUserId.nickname}}
+					</a>
+					<div class="sub header">
+						{{article.belongToUserId.intro}}
+					</div>
+				</div>
+				<div id="articleQrcode"></div>
+				<p>
+					“扫一扫”分享到微信
+				</p>
+				{{#if hasLogin}}
+				<!-- 如果用户已登录 -->
+				{{#if hasLike}}
+				<!-- 已喜欢该文章 -->
+				<div class="ui small circular button red unLikeBtn" data-articleId="{{article._id}}">
+					<i class="heart icon"></i>
+					喜欢
+				</div>
+				{{else}}
+				<!-- 未喜欢该文章 -->
+				<div class="ui small circular button likeBtn" data-articleId="{{article._id}}">
+					<i class="heart icon"></i>
+					喜欢
+				</div>
+				{{/if}}
+				<div class="ui small circular button includeBtn" data-articleId="{{article._id}}">
+					<i class="add icon"></i>
+					收录
+				</div>
+				{{else}}
+				<!-- 用户未登录 -->
+				<div class="ui small circular button notLogin">
+					<i class="heart icon"></i>
+					喜欢
+				</div>
+				<div class="ui small circular button notLogin">
+					<i class="add icon"></i>
+					收录
+				</div>
+				{{/if}}
+
+			</div>
+			<div class="thirteen wide column right">
+				<h1 class="ui black header center aligned" id="title" data-id="{{article._id}}"> {{article.title}} </h1>
+				<div class="article-info">
+					发表于
+					<i class="book black small icon"></i>
+					<a class="notebook" href="/notebooks/{{article.belongToNotebookId._id}}">
+						{{article.belongToNotebookId.name}}
+					</a>
+					<span>{{article.localCreateTime}}</span>
+					<span>字数：{{article.wordsNum}}</span>
+					<span>阅读量：{{article.viewsNum}}</span>
+				</div>
+				<div class="ui basic segment" id="epiceditor-preview">
+					{{{article.htmlContent}}}
+				</div>
+				<div class="bdsharebuttonbox">
+					<a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+					<a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+					<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+					<a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+					<a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+					<a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+					<a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+					<a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+					<a href="#" class="bds_more" data-cmd="more"></a>
+				</div>
+				<script>
+					window._bd_share_config = {
+						"common" : {
+							"bdSnsKey" : {},
+							"bdText" : "#{{article.title}}# —— {{article.intro}}",
+							"bdMini" : "2",
+							"bdMiniList" : false,
+							"bdPic" : "",
+							"bdStyle" : "2",
+							"bdSize" : "24"
+						},
+						"share" : {}
+					};
+					with (document)
+					0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+				</script>
+			</div>
+		</div>
+		<div class="ui inverted teal page grid segment footer">
+			<div class="ui inverted teal menu tabMenu" id="tabMenu">
+				<a class="active item" data-id="1">
+					入选专题
+				</a>
+				<a class="item" data-id="2">
+					作者信息
+				</a>
+				<a class="item" data-id="3">
+					{{article.commentsNum}} 条评论
+				</a>
+				<a class="item" data-id="4">
+					{{article.likesNum}} 个喜欢
+				</a>
+			</div>
+			<div class="ui bottom attached inverted teal basic segment tabItem" data-id="1">
+				<div class="ui horizontal list">
+					{{#each article.belongToCollectionIds}}
+					<a class="item" href="/collections/{{_id}}" target="_blank">
+						<img class="ui avatar image" src="{{sThumbnailUrl}}">
+						<div class="content">
+							<div class="header">
+								{{name}}
+							</div>
+						</div>
+					</a>
+					{{/each}}
+				</div>
+			</div>
+			<div class="ui bottom attached inverted teal basic segment tabItem hide" data-id="2">
+				<a href="/users/{{article.belongToUserId._id}}">
+					<img class="circular ui small left floated image" src="{{article.belongToUserId.sHeadimgurl}}">
+				</a>
+				<div class="ui left aligned header">
+					<a href="/users/{{article.belongToUserId._id}}">
+						{{article.belongToUserId.nickname}}
+					</a>
+					<div class="sub header">
+						{{article.belongToUserId.intro}}
+					</div>
+				</div>
+			</div>
+			<div class="ui bottom attached inverted teal basic segment tabItem hide" data-id="3">
+
+			</div>
+			<div class="ui bottom attached inverted teal basic segment tabItem feed hide" data-id="4">
+				<div class="event">
+					<img class="ui avatar image" src="/img/8771a6e75152.jpg">
+					<div class="content">
+						<div class="summary">
+							<a>
+								silianlinyi
+							</a>
+							大约8小时前喜欢了这篇文章
+						</div>
+					</div>
+				</div>
+				<div class="event">
+					<img class="ui avatar image" src="/img/8771a6e75152.jpg">
+					<div class="content">
+						<div class="summary">
+							<a>
+								silianlinyi
+							</a>
+							大约8小时前喜欢了这篇文章
+						</div>
+					</div>
+				</div>
+				<div class="event">
+					<img class="ui avatar image" src="/img/8771a6e75152.jpg">
+					<div class="content">
+						<div class="summary">
+							<a>
+								silianlinyi
+							</a>
+							大约8小时前喜欢了这篇文章
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 浮层：收录到我编辑的专题 -->
+		<div class="ui popup bottom center transition myCollections">
+			<h3>收录到我编辑的专题</h3>
+			<div class="ui divider"></div>
+			<div class="ui selection list"></div>
+			<i class="close large icon"></i>
+		</div>
+
+		<script src="/lib/modernizr.js"></script>
+		<script src="/lib/jquery.js"></script>
+		<script src="/lib/semantic.js"></script>
+		<script src="/lib/jquery.qrcode.min.js"></script>
+		<script data-main="/js/articleInfo" src="/lib/require.js"></script>
+
+		{{#if hasLogin }}
+		{{else}}
+		{{> login_modal }}
+		{{/if}}
+
+	</body>
+</html>

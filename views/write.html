@@ -1,0 +1,153 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>微糖</title>
+
+		<link rel="stylesheet" href="/css/semantic.css" />
+		<link rel="stylesheet" href="/css/common.css" />
+		<link rel="stylesheet" href="/css/write.css" />
+		
+	</head>
+	<body class="write page">
+
+		{{> menu }}
+		
+		<div class="ui grid">
+			<!-- left -->
+			<div class="ui two wide column left">
+				<div class="ui small black header new-notebook-btn"><i class="add icon"></i>新建文集</div>
+				<div class="ui form new-notebook-form">
+					<div class="field">
+						<input type="text" placeholder="请输入文集名...">
+					</div>
+					<div class="inline field">
+						<div class="ui small button cancel">取&nbsp;&nbsp;消</div>
+						<div class="ui small blue button submit">提&nbsp;&nbsp;交</div>
+					</div>
+				</div>
+				<div class="ui selection list notebooks"></div>
+			</div>
+			<!-- end left -->
+			
+			<!-- middle -->
+			<div class="ui three wide column middle">
+				<div class="ui small black header new-article-btn"><i class="edit icon"></i>新建文章</div>
+				<div class="ui selection list articles"></div>
+			</div>
+			<!-- end middle -->
+			
+			<!-- right -->
+			<div class="ui ten wide column right">
+				<div class="mask"><span>微糖</span></div>
+				<div class="ui huge icon input">
+					<input type="text" placeholder="无标题文章" class="title">
+				</div>
+				
+				<ul class="toolbar clearfix">
+					<!--<li data-content="撤销" data-variation="inverted" data-position="bottom center">
+						<i class="undo large icon"></i>
+					</li>
+					<li data-content="重做" data-variation="inverted" data-position="bottom center">
+						<i class="repeat large icon"></i>
+					</li>
+					<li data-content="插入图片" data-variation="inverted" data-position="bottom center">
+						<i class="photo large icon"></i>
+					</li>-->
+					<li style="float: right;height: 24px;padding-right: 15px;padding-left: 15px;" id="unPublishBtn">
+						<i class="icon checkmark"></i>已发布
+					</li>
+					<li style="float: right;height: 24px;padding-right: 15px;padding-left: 15px;" id="publishBtn">
+						<i class="icon forward mail"></i>发布文章
+					</li>
+					<li class="fullscreen popup" style="float: right;" data-content="全屏" data-variation="inverted" data-position="bottom center">
+						<i class="icon large fullscreen"></i>
+					</li>
+					<li class="preview popup" style="float: right;" data-content="切换预览模式" data-variation="inverted" data-position="bottom center">
+						<i class="icon large unhide"></i>
+					</li>
+					<li class="save popup" style="float: right;" data-content="保存" data-variation="inverted" data-position="bottom center">
+						<i class="save large icon"></i>
+					</li>
+				</ul>
+				<div id="epiceditor" style="height: 100%;;"></div>
+			</div>
+			<!-- end right -->
+		</div>
+		
+		<!-- 删除文集Modal -->
+		<div class="ui small modal transition hidden" id="deleteNotebookModal">
+			<i class="close icon"></i>
+			<div class="black header">
+				你确定要删除这个文集吗？
+			</div>
+			<div class="content">
+				<p>
+					相关文章将会一同删除, 该操作无法逆转。
+				</p>
+			</div>
+			<div class="actions">
+				<div class="ui button">
+					取消
+				</div>
+				<div class="ui positive red right button">
+					确认
+				</div>
+			</div>
+		</div>
+		<!-- end -->
+		
+		<!-- 修改文集名 Modal -->
+		<div class="ui small modal transition" id="updateNotebookModal">
+			<i class="close icon"></i>
+			<div class="black header">
+				修改文集名
+			</div>
+			<div class="content">
+				<div class="ui input">
+				  <input type="text" placeholder="">
+				</div>
+			</div>
+			<div class="actions">
+				<div class="ui button">
+					取消
+				</div>
+				<div class="ui positive red right button">
+					确认
+				</div>
+			</div>
+		</div>
+		<!-- end -->
+		
+		<!-- 删除文章 Modal -->
+		<div class="ui small modal transition hidden" id="deleteArticleModal">
+			<i class="close icon"></i>
+			<div class="black header">
+				你确定要删除这篇文章吗？
+			</div>
+			<div class="content">
+				<p>
+					注意:该操作无法逆转。
+				</p>
+			</div>
+			<div class="actions">
+				<div class="ui button">
+					取消
+				</div>
+				<div class="ui positive red right button">
+					确认
+				</div>
+			</div>
+		</div>
+		<!-- end -->
+		
+		<script src="/lib/modernizr.js"></script>
+		<script src="/lib/jquery.js"></script>
+		<script src="/lib/semantic.js"></script>
+		<script src="/lib/jquery.qrcode.min.js"></script>
+		<script src="/epiceditor/js/epiceditor.min.js"></script>
+		<script data-main="/js/write" src="/lib/require.js"></script>
+		
+	</body>
+</html>
