@@ -28,7 +28,7 @@
 			<a href="/notifications" class="item" data-content="提醒" data-variation="inverted" data-position="left center">
 				<i class="icon bell"></i>提醒
 			</a>
-			<a href="/messages/inbox" class="item" data-content="私信" data-variation="inverted" data-position="left center">
+			<a href="/messages/inbox" class="item messages" data-content="私信" data-variation="inverted" data-position="left center">
 				<i class="icon mail"></i>私信
 			</a>
 			<a href="/settings" class="item settings" data-content="设置" data-variation="inverted" data-position="left center">
@@ -89,6 +89,8 @@
 			$('#menu-sidebar .write.item').addClass('active');
 		} else if(/users/.test(href)) {
 			$('#menu-sidebar .users.item').addClass('active');
+		} else if(/messages/.test(href)) {
+			$('#menu-sidebar .messages.item').addClass('active');
 		} else if(/settings/.test(href)) {
 			$('#menu-sidebar .settings.item').addClass('active');
 		} else {

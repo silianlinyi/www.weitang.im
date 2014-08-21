@@ -1,4 +1,4 @@
-var Notebook = require('../proxy/Notebook');
+var Notebook = require('../proxy/notebook');
 var Article = require('../proxy/article');
 
 module.exports = {

@@ -64,7 +64,7 @@ module.exports = {
 	findByArticleIdAndPage : function(articleId, pageSize, pageStart, callback) {
 		var query = ArticleLike.find({
 			articleId : articleId
-		}).limit(pageSize).skip(pageStart);
+		}).limit(pageSize).skip(pageStart).sort('-createTime');
 		query.populate('userId', '_id nickname sHeadimgurl');
 		query.exec(function(err, docs) {
 			if (err) {

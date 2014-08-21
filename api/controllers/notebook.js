@@ -1,6 +1,6 @@
-var Notebook = require('../proxy/Notebook');
-var Article = require('../proxy/Article');
-var User = require('../proxy/User');
+var Notebook = require('../proxy/notebook');
+var Article = require('../proxy/article');
+var User = require('../proxy/user');
 
 var auth = require('../policies/auth');
 var xss = require('xss');

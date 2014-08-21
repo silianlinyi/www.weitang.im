@@ -24,8 +24,8 @@ var auth = require('./api/policies/auth');
 // 防止微信端页面刷新时，页面空白
 router.get('/*', function(req, res, next) {
 	res.set({
-		'Content-Type' : 'text/html',
-		'ETag' : Date.now()
+		'Content-Type': 'text/html',
+		'ETag': Date.now()
 	});
 	next();
 });
@@ -72,15 +72,17 @@ router.get('/users/:_id/timeline', user.showTimeline);
 // 我的主页 - 热门文章
 router.get('/users/:_id/topArticles', user.showTopArticles);
 // 我喜欢的
-router.get('/favourites', user.showFavourites)
+router.get('/favourites', user.showFavourites);
 // 提醒
 router.get('/notifications', notification.showNotifications);
 // 私信 - 收件箱
-router.get('/messages/inbox', message.showInbox);
+router.get('/messages/inbox', auth.pageAuth, message.showInbox);
 // 私信 - 发件箱
-router.get('/messages/sent', message.showSent);
+router.get('/messages/sent', auth.pageAuth, message.showSent);
 // 私信 - 写信
-router.get('/messages/new', message.showNew);
+router.get('/messages/new', auth.pageAuth, message.showNew);
+// 私信 - 详情页
+router.get('/messages/:_id', auth.pageAuth, message.showMessageInfo);
 // 文章详情页
 router.get('/articles/:_id', article.showArticleInfo);
 // 设置-首页（个人资料）
@@ -119,6 +121,8 @@ router.get('/api/users/:_id', user.findUserById);
 router.put('/api/users/password', auth.ajaxAuth, user.updatePassword);
 // 修改个人资料
 router.put('/api/users/info', auth.ajaxAuth, user.updateUserInfo);
+// 根据用户昵称搜索用户
+router.get('/api/users/nickname', user.findUsersByNickname);
 
 // === 文集操作 ===
 // 新建文集
@@ -131,7 +135,7 @@ router.get('/api/users/:_id/notebooks', notebook.findAllNotebooksByUserId);
 // 更新某个文集
 router.put('/api/notebooks/:_id', auth.ajaxAuth, notebook.updateNotebookById);
 // 删除某个文集
-router.delete ('/api/notebooks/:_id', auth.ajaxAuth, notebook.deleteNotebookById);
+router.delete('/api/notebooks/:_id', auth.ajaxAuth, notebook.deleteNotebookById);
 
 // === 文章操作 ===
 // 新建一篇文章
@@ -143,7 +147,7 @@ router.put('/api/articles/:_id/status', auth.ajaxAuth, article.updateArticleStat
 // 查询某个文集下的所有文章
 router.get('/api/notebook/:_id/articles', article.findAllArticleByNotebookId);
 // 删除某篇文章
-router.delete ('/api/articles/:_id', auth.ajaxAuth, article.deleteArticleById);
+router.delete('/api/articles/:_id', auth.ajaxAuth, article.deleteArticleById);
 // 分页查询某用户的文章
 router.get('/api/users/:_id/articles', article.findArticlesByUserIdAndPage);
 // 分页查询最新发表的文章
@@ -167,7 +171,7 @@ router.get('/api/collections/mine', auth.ajaxAuth, collection.findAllMyCollectio
 // 订阅专题
 router.post('/api/collections/:_id/sub', auth.ajaxAuth, collection.subCollection);
 // 取消订阅专题
-router.delete ('/api/collections/:_id/unSub', auth.ajaxAuth, collection.unSubCollection);
+router.delete('/api/collections/:_id/unSub', auth.ajaxAuth, collection.unSubCollection);
 // 我订阅的所有专题
 router.get('/api/collections/sub', auth.ajaxAuth, collection.findAllMyCollectionSubs);
 // 根据关键字搜索专题
@@ -177,9 +181,23 @@ router.get('/api/users/:_id/collections', collection.findAllCollectionsByUserId)
 // 我创建的所有专题，并且返回当前文章是否已经收录信息
 router.get('/api/collections/mine/with', auth.ajaxAuth, collection.findAllMyCollectionsWith);
 
+// === 私信操作 ===
+// 新建一封私信
+router.post('/api/messages', auth.ajaxAuth, message.newMessage);
+// 根据私信Id查询
+router.get('/api/messages/:_id', auth.ajaxAuth, message.findMessageById);
+// 分页查询私信（包括收信和发信）
+router.get('/api/messages', auth.ajaxAuth, message.findMessagesByPage);
+// 私信 - 从未读修改为已读状态
+router.put('/api/messages/:_id/status', auth.ajaxAuth, message.updateMessageStatus);
+// 删除一条私信
+router.delete('/api/messages/:_id', auth.ajaxAuth, message.deleteMessageById);
+
+
 /**
  * 后台管理页面
  * -------------------------------------------
  */
+router.get('/admin/login', admin.showLogin);
 
 module.exports = router;

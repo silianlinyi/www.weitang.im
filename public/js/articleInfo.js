@@ -195,6 +195,7 @@ define(['iAlert', 'Util'], function(iAlert, Util) {
 		$.ajax({
 			url : '/api/articles/' + articleId + '/likes',
 			method : 'GET',
+			data : config,
 			success : function(data) {
 				console.log(data);
 				if (data.r === 0) {
@@ -206,15 +207,57 @@ define(['iAlert', 'Util'], function(iAlert, Util) {
 		});
 	}
 
+	function renderOne(articleLike) {
+		var temp = '<div class="event">';
+		if (articleLike.sHeadimgurl) {
+			temp += '<img class="ui avatar image" src="' + articleLike.sHeadimgurl + '">';
+		} else {
+			temp += '<img class="ui avatar image" src="/img/default_avatar.png">';
+		}
+		temp += '<div class="content">';
+		temp += '<div class="summary">';
+		temp += '<a>' + articleLike.nickname + '</a>';
+		temp += ' 大约 ' + Util.convertDate(articleLike.createTime) + ' 喜欢了这篇文章';
+		temp += '</div></div></div>';
+		$('.footer .tabItem[data-id="4"] ul').append($(temp));
+	}
+
+	function render(articleLikes) {
+		var len = articleLikes.length;
+		for (var i = 0; i < len; i++) {
+			renderOne(articleLikes[i]);
+		}
+	}
+
 	var queryConfig = {
-		pageSize : 1,
+		pageSize : 10,
 		pageStart : 0
 	};
 
 	var articleId = $('#title').attr('data-id');
 
 	findByArticleIdAndPage(articleId, queryConfig, function(data) {
+		render(data.articleLikes);
+		queryConfig.pageStart += data.articleLikes.length;
+	});
 
+	$('#loadMore').on('click', function() {
+		findByArticleIdAndPage(articleId, queryConfig, function(data) {
+			var articleLikes = data.articleLikes;
+			var len = articleLikes.length;
+
+			if (len === 0) {
+				$('#loadMore').html('无更多记录');
+			} else if (len < queryConfig.pageSize) {
+				$('#loadMore').html('无更多记录');
+				queryConfig.pageStart += len;
+				render(articleLikes);
+			} else if (len === queryConfig.pageSize) {
+				$('#loadMore').html('查看更多<i class="icon double angle down"></i>');
+				queryConfig.pageStart += len;
+				render(articleLikes);
+			}
+		});
 	});
 
 	$('#tabMenu').on('click', '.item', function(e) {

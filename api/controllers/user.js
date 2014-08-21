@@ -16,17 +16,17 @@ var config = require('../../config');
 function checkEmail(req, res, email) {
 	if (!email) {
 		res.json({
-			"r" : 1,
-			"errcode" : 10001,
-			"msg" : ERRCODE[10001]
+			"r": 1,
+			"errcode": 10001,
+			"msg": ERRCODE[10001]
 		});
 		return false;
 	}
 	if (!Util.isEmail(email)) {
 		res.json({
-			"r" : 1,
-			"errcode" : 10000,
-			"msg" : ERRCODE[10000]
+			"r": 1,
+			"errcode": 10000,
+			"msg": ERRCODE[10000]
 		});
 		return false;
 	}
@@ -37,17 +37,17 @@ function checkEmail(req, res, email) {
 function checkNickname(req, res, nickname) {
 	if (!nickname) {
 		res.json({
-			"r" : 1,
-			"errcode" : 10002,
-			"msg" : ERRCODE[10002]
+			"r": 1,
+			"errcode": 10002,
+			"msg": ERRCODE[10002]
 		});
 		return false;
 	}
 	if (!/^\w{6,20}$/.test(nickname)) {
 		res.json({
-			"r" : 1,
-			"errcode" : 10003,
-			"msg" : ERRCODE[10003]
+			"r": 1,
+			"errcode": 10003,
+			"msg": ERRCODE[10003]
 		});
 		return false;
 	}
@@ -58,9 +58,9 @@ function checkNickname(req, res, nickname) {
 function checkPassword(req, res, password) {
 	if (!password) {
 		res.json({
-			"r" : 1,
-			"errcode" : 10004,
-			"msg" : ERRCODE[10004]
+			"r": 1,
+			"errcode": 10004,
+			"msg": ERRCODE[10004]
 		});
 		return false;
 	}
@@ -73,9 +73,9 @@ function checkPassword(req, res, password) {
 function checkCaptcha(req, res, captcha) {
 	if (!captcha) {
 		res.json({
-			"r" : 1,
-			"errcode" : 10005,
-			"msg" : ERRCODE[10005]
+			"r": 1,
+			"errcode": 10005,
+			"msg": ERRCODE[10005]
 		});
 		return false;
 	}
@@ -83,9 +83,9 @@ function checkCaptcha(req, res, captcha) {
 	var _captcha = ccap.getCaptcha(req, res);
 	if (_captcha.toLowerCase() !== captcha.toLowerCase()) {
 		res.json({
-			"r" : 1,
-			"errcode" : 10006,
-			"msg" : ERRCODE[10006]
+			"r": 1,
+			"errcode": 10006,
+			"msg": ERRCODE[10006]
 		});
 		return false;
 	}
@@ -99,7 +99,7 @@ module.exports = {
 	 * -------------------------------------------
 	 */
 	// 我的主页 - 关注
-	showFollowing : function(req, res) {
+	showFollowing: function(req, res) {
 		var userId = req.params._id;
 		// url中的用户Id
 		var isLogin = auth.isLogin(req, res);
@@ -123,10 +123,10 @@ module.exports = {
 						return next(err);
 					}
 					res.render('following', {
-						u : user,
-						isMyself : isMyself,
-						notebooks : notebooks,
-						collections : collections
+						u: user,
+						isMyself: isMyself,
+						notebooks: notebooks,
+						collections: collections
 					});
 				});
 			});
@@ -134,14 +134,14 @@ module.exports = {
 	},
 
 	// 我的主页 - 粉丝
-	showFollowers : function(req, res) {
+	showFollowers: function(req, res) {
 
 	},
 
 	/**
 	 * 我的主页 - 最新文章
 	 */
-	showLatestArticles : function(req, res, next) {
+	showLatestArticles: function(req, res, next) {
 		var userId = req.params._id;
 		// url中的用户Id
 		var isLogin = auth.isLogin(req, res);
@@ -165,10 +165,10 @@ module.exports = {
 						return next(err);
 					}
 					res.render('latestArticles', {
-						u : user,
-						isMyself : isMyself,
-						notebooks : notebooks,
-						collections : collections
+						u: user,
+						isMyself: isMyself,
+						notebooks: notebooks,
+						collections: collections
 					});
 				});
 			});
@@ -176,44 +176,44 @@ module.exports = {
 	},
 
 	// 我的主页 - 最新动态
-	showTimeline : function(req, res) {
+	showTimeline: function(req, res) {
 
 	},
 
 	// 我的主页 - 热门文章
-	showTopArticles : function(req, res) {
+	showTopArticles: function(req, res) {
 
 	},
 
 	// 注册
-	showSignUp : function(req, res) {
+	showSignUp: function(req, res) {
 		res.render('signUp');
 	},
 
 	// 注册成功
-	showRegisterSucc : function(req, res) {
+	showRegisterSucc: function(req, res) {
 		res.render('registerSucc');
 	},
 
 	// 登录
-	showSignIn : function(req, res) {
+	showSignIn: function(req, res) {
 		res.render('signIn');
 	},
 
-	showFavourites : function(req, res) {
+	showFavourites: function(req, res) {
 
 	},
 
 	// 设置 - 个人资料
-	showSettingsIndex : function(req, res, next) {
+	showSettingsIndex: function(req, res, next) {
 		var userId = auth.getUserId(req, res);
 		User.findUserById(userId, function(err, user) {
 			if (err) {
 				return next(err);
 			}
 			res.render('settingsIndex', {
-				u : user,
-				QINIU_Domain : config.QINIU_Domain
+				u: user,
+				QINIU_Domain: config.QINIU_Domain
 			});
 		});
 	},
@@ -223,7 +223,7 @@ module.exports = {
 	 * -------------------------------------------
 	 */
 	// 注册
-	signUp : function(req, res, next) {
+	signUp: function(req, res, next) {
 		var body = req.body;
 		var email = xss(body.email);
 		var nickname = xss(body.nickname);
@@ -249,9 +249,9 @@ module.exports = {
 			}
 			if (!!user) {
 				res.json({
-					r : 1,
-					errcode : 10008,
-					msg : ERRCODE[10008]
+					r: 1,
+					errcode: 10008,
+					msg: ERRCODE[10008]
 				});
 				return;
 			}
@@ -271,8 +271,8 @@ module.exports = {
 							return next(err);
 						}
 						res.json({
-							"r" : 0,
-							"msg" : "注册成功"
+							"r": 0,
+							"msg": "注册成功"
 						});
 					});
 				});
@@ -281,7 +281,7 @@ module.exports = {
 	},
 
 	// 登录
-	signIn : function(req, res, next) {
+	signIn: function(req, res, next) {
 		var body = req.body;
 		var email = body.email;
 		var password = body.password;
@@ -292,25 +292,25 @@ module.exports = {
 			}
 			if (user === null) {
 				res.json({
-					r : 1,
-					errcode : 10009,
-					msg : ERRCODE[10009]
+					r: 1,
+					errcode: 10009,
+					msg: ERRCODE[10009]
 				});
 				return;
 			} else {
 				if (user.password !== Util.md5(password)) {
 					res.json({
-						r : 1,
-						errcode : 10010,
-						msg : ERRCODE[10010]
+						r: 1,
+						errcode: 10010,
+						msg: ERRCODE[10010]
 					});
 					return;
 				} else {
 					auth.newSession(req, res, user);
 					res.json({
-						r : 0,
-						errcode : 1000,
-						msg : ERRCODE[1000]
+						r: 0,
+						errcode: 1000,
+						msg: ERRCODE[1000]
 					});
 					return;
 				}
@@ -319,7 +319,7 @@ module.exports = {
 	},
 
 	// 登出
-	signOut : function(req, res) {
+	signOut: function(req, res) {
 		req.session.destroy();
 		res.redirect('/');
 	},
@@ -328,16 +328,16 @@ module.exports = {
 	 * @method findUserById
 	 * 根据用户Id查找某个用户
 	 */
-	findUserById : function(req, res) {
+	findUserById: function(req, res) {
 		var _id = req.params._id;
 		User.findById(_id, function(err, user) {
 			if (err) {
 				return next(err);
 			}
 			return res.json({
-				r : 0,
-				msg : "查找用户详情成功",
-				user : user
+				r: 0,
+				msg: "查找用户详情成功",
+				user: user
 			});
 		})
 	},
@@ -346,7 +346,7 @@ module.exports = {
 	 * @method updatePassword
 	 * 修改密码
 	 */
-	updatePassword : function(req, res, next) {
+	updatePassword: function(req, res, next) {
 		var email = auth.getUserEmail(req, res);
 		var oldPass = req.body.oldPass;
 		var newPass = req.body.newPass;
@@ -357,9 +357,9 @@ module.exports = {
 			}
 			if (user.password !== Util.md5(oldPass)) {
 				return res.json({
-					r : 1,
-					errcode : 10010,
-					msg : ERRCODE[10010]
+					r: 1,
+					errcode: 10010,
+					msg: ERRCODE[10010]
 				});
 			} else {
 				User.updatePassword(user._id, Util.md5(newPass), function(err, user) {
@@ -367,8 +367,8 @@ module.exports = {
 						return next(err);
 					}
 					return res.json({
-						r : 0,
-						msg : '修改密码成功'
+						r: 0,
+						msg: '修改密码成功'
 					});
 				});
 			}
@@ -379,7 +379,7 @@ module.exports = {
 	 * @method updateUserInfo
 	 * 修改个人资料
 	 */
-	updateUserInfo : function(req, res, next) {
+	updateUserInfo: function(req, res, next) {
 		var userId = auth.getUserId(req, res);
 		var body = req.body;
 		var headimgurl = body.headimgurl;
@@ -395,62 +395,67 @@ module.exports = {
 
 		if (!nickname) {
 			return res.json({
-				r : 1,
-				errcode : 10002,
-				msg : ERRCODE[10002]
+				r: 1,
+				errcode: 10002,
+				msg: ERRCODE[10002]
 			});
 		}
 
 		User.updateUserInfo({
-			_id : userId,
-			headimgurl : headimgurl,
-			sHeadimgurl : sHeadimgurl,
-			nickname : xss(nickname),
-			sex : sex,
-			province : province,
-			city : city,
-			phone : xss(phone),
-			qq : xss(qq),
-			url : xss(url),
-			intro : xss(intro)
+			_id: userId,
+			headimgurl: headimgurl,
+			sHeadimgurl: sHeadimgurl,
+			nickname: xss(nickname),
+			sex: sex,
+			province: province,
+			city: city,
+			phone: xss(phone),
+			qq: xss(qq),
+			url: xss(url),
+			intro: xss(intro)
 		}, function(err, user) {
 			if (err) {
 				return next(err);
 			}
 			return res.json({
-				r : 0,
-				msg : '修改个人资料成功'
+				r: 0,
+				msg: '修改个人资料成功'
 			});
 		});
 	},
 
+	// 根据用户昵称搜索用户
+	findUsersByNickname: function(req, res, next) {
+		
+	},
+
 	// 分页查询所有用户
-	findUsersByPage : function(req, res) {
+	findUsersByPage: function(req, res) {
 
 	},
 
 	// 根据关键字（用户昵称、邮箱地址、手机号）搜索用户
-	findUsersByKey : function(req, res) {
+	findUsersByKey: function(req, res) {
 
 	},
 
 	// 根据用户Id删除某个用户
-	deleteUserById : function(req, res) {
+	deleteUserById: function(req, res) {
 
 	},
 
 	// 关注用户
-	followingUser : function(req, res) {
+	followingUser: function(req, res) {
 
 	},
 
 	// 取消关注用户
-	unFollowingUser : function(req, res) {
+	unFollowingUser: function(req, res) {
 
 	},
 
 	// 根据用户Id更新用户信息
-	updateUserById : function(req, res) {
+	updateUserById: function(req, res) {
 
 	}
 };

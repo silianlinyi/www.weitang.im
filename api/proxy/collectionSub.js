@@ -1,6 +1,6 @@
 var CollectionSub = require('../models/CollectionSub');
 var Collection = require('./collection');
-var User = require('./User');
+var User = require('./user');
 
 module.exports = {
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<title>微糖</title>
+
+		<link rel="stylesheet" href="/css/semantic.css" />
+		<link rel="stylesheet" href="/css/common.css" />
+		<link rel="stylesheet" href="/css/message.css" />
+	</head>
+
+	<body class="index page">
+
+		<div class="ui page grid">
+			<div class="ui raised piled segment">
+				<div class="ui center aligned black large header" data-id="{{message._id}}">
+					{{message.topic}}
+				</div>
+				{{#if inbox}}
+				<!-- 我是收件人 -->
+				<p>
+					来自 {{#if message.fromUser.sHeadimgurl}}
+					<img src="{{message.fromUser.sHeadimgurl}}" class="ui avatar image" />{{else}}
+					<img src="/img/default_avatar.png" class="ui avatar image" />{{/if}}
+					<a href="/users/{{message.fromUser._id}}">{{message.fromUser.nickname}}</a> 的私信
+				</p>
+				<p>
+					{{message.content}}
+				</p>
+				<a class="ui green small button" href="/messages/new?toUser={{message.fromUser.email}}&topic={{message.topic}}">
+					<i class="icon forward mail"></i>回复
+				</a>
+				<div class="ui button small delete"><i class="icon trash"></i>删除</div>
+				{{else}}
+				<!-- 我是发件人 -->
+				<p>
+					发给 {{#if message.toUser.sHeadimgurl}}
+					<img src="{{message.toUser.sHeadimgurl}}" class="ui avatar image" />{{else}}
+					<img src="/img/default_avatar.png" class="ui avatar image" />{{/if}}
+					<a href="/users/{{message.toUser._id}}">{{message.toUser.nickname}}</a> 的私信
+				</p>
+				<p>
+					{{message.content}}
+				</p>
+				<div class="ui button small delete"><i class="icon trash"></i>删除</div>
+				{{/if}}
+			</div>
+
+		</div>
+
+		{{> menu }}
+
+		<script src="/lib/modernizr.js"></script>
+		<script src="/lib/jquery.js"></script>
+		<script src="/lib/semantic.js"></script>
+		<script src="/lib/jquery.qrcode.min.js"></script>
+		<script data-main="/js/messageInfo" src="/lib/require.js"></script>
+
+	</body>
+
+</html>

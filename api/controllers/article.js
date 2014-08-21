@@ -30,9 +30,7 @@ module.exports = {
 	 */
 	showArticleInfo : function(req, res, next) {
 		var _id = req.params._id;
-		console.log(_id);
 		_id = _id.slice(0, 24);
-		console.log(_id);
 		var isLogin = auth.isLogin(req, res);
 		// 标记用户是否已经喜欢了该文章
 		var hasLike = false;

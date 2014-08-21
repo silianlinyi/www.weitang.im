@@ -5,13 +5,32 @@ var ObjectId = Schema.Types.ObjectId;
 
 /**
  * 私信
- * inUserId		收信方用户ID
- * sendUserId	发件方用户ID
- * createTime	创建时间
- * content		私信内容
+ * status	0-未读、1-已读
  */
 var MessageSchema = new Schema({
-    
+    toUser : {
+    	type : ObjectId,
+    	ref : 'User'
+    },
+    fromUser : {
+    	type : ObjectId,
+    	ref : 'User'
+    },
+    topic : {
+    	type : String,
+    	
+    },
+    content : {
+    	type : String
+    },
+    status : {
+    	type : Number,
+    	default : 0
+    },
+    createTime: {
+        type: Number,
+        default: Date.now
+    }
 });
 
 module.exports = mongoose.model("Message", MessageSchema, "wt_messages");
