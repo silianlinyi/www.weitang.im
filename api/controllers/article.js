@@ -3,6 +3,7 @@ var marked = require('marked');
 var Util = require('../common/util');
 var Article = require('../proxy/article');
 var ArticleLike = require('../proxy/articleLike');
+var ArticleComment = require('../proxy/articleComment');
 var User = require('../proxy/user');
 var Notebook = require('../proxy/notebook');
 var auth = require('../policies/auth');
@@ -15,12 +16,12 @@ module.exports = {
 	 * -------------------------------------------
 	 */
 	// 微糖热门 - 七日热门文章
-	showWeekly : function(req, res) {
+	showWeekly: function(req, res) {
 		res.render('weekly');
 	},
 
 	// 微糖热门 - 三十日热门文章
-	showMonthly : function(req, res) {
+	showMonthly: function(req, res) {
 		res.render('monthly');
 	},
 
@@ -28,7 +29,7 @@ module.exports = {
 	 * @method showArticleInfo
 	 * 文章详情页
 	 */
-	showArticleInfo : function(req, res, next) {
+	showArticleInfo: function(req, res, next) {
 		var _id = req.params._id;
 		_id = _id.slice(0, 24);
 		var isLogin = auth.isLogin(req, res);
@@ -40,12 +41,16 @@ module.exports = {
 				if (err) {
 					return next(err);
 				}
-				article.htmlContent = marked(article.content);
-				article.localCreateTime = Util.convertDate(article.createTime);
-				res.render('articleInfo', {
-					article : article,
-					hasLike : hasLike
-				});
+				if (article) {
+					article.htmlContent = marked(article.content);
+					article.localCreateTime = Util.convertDate(article.createTime);
+					res.render('articleInfo', {
+						article: article,
+						hasLike: hasLike
+					});
+				} else {
+					return next();
+				}
 			});
 		}
 
@@ -73,7 +78,7 @@ module.exports = {
 	 * @method newArticle
 	 * 新建一篇文章，用户总文章数+1，文集下的总文章+1
 	 */
-	newArticle : function(req, res, next) {
+	newArticle: function(req, res, next) {
 		var body = req.body;
 		var title = "无标题文章";
 		var content = "";
@@ -85,9 +90,9 @@ module.exports = {
 				return next(err);
 			}
 			return res.json({
-				r : 0,
-				msg : '新建文章成功',
-				article : article
+				r: 0,
+				msg: '新建文章成功',
+				article: article
 			});
 		});
 	},
@@ -96,7 +101,7 @@ module.exports = {
 	 * @method findAllArticleByNotebookId
 	 * 查找某个文集下的所有文章
 	 */
-	findAllArticleByNotebookId : function(req, res, next) {
+	findAllArticleByNotebookId: function(req, res, next) {
 		var belongToNotebookId = req.params._id;
 
 		Article.findAllByNotebookId(belongToNotebookId, function(err, articles) {
@@ -105,9 +110,9 @@ module.exports = {
 			}
 			res.type('json');
 			return res.json({
-				r : 0,
-				msg : "查找所有文章成功",
-				articles : articles
+				r: 0,
+				msg: "查找所有文章成功",
+				articles: articles
 			});
 		});
 	},
@@ -116,7 +121,7 @@ module.exports = {
 	 * @method updateArticleById
 	 * 根据文章的Id修改某篇文章
 	 */
-	updateArticleById : function(req, res, next) {
+	updateArticleById: function(req, res, next) {
 		var articleId = req.params._id;
 		var body = req.body;
 		var title = xss(body.title);
@@ -134,9 +139,9 @@ module.exports = {
 					return next(err);
 				}
 				return res.json({
-					r : 0,
-					msg : "更新文章成功",
-					article : article
+					r: 0,
+					msg: "更新文章成功",
+					article: article
 				});
 			});
 		});
@@ -146,7 +151,7 @@ module.exports = {
 	 * @method updateArticleStatusById
 	 * 发布 / 取消发布文章
 	 */
-	updateArticleStatusById : function(req, res, next) {
+	updateArticleStatusById: function(req, res, next) {
 		var articleId = req.params._id;
 		var status = Number(req.body.status) || 0;
 
@@ -156,9 +161,9 @@ module.exports = {
 			}
 			res.type('json');
 			return res.json({
-				r : 0,
-				msg : status === 0 ? "取消发布成功" : "发布成功",
-				article : article
+				r: 0,
+				msg: status === 0 ? "取消发布成功" : "发布成功",
+				article: article
 			});
 		});
 	},
@@ -167,7 +172,7 @@ module.exports = {
 	 * @method deleteArticleById
 	 * 根据文章的Id删除某篇文章
 	 */
-	deleteArticleById : function(req, res, next) {
+	deleteArticleById: function(req, res, next) {
 		var articleId = req.params._id;
 		Article.deleteArticleById(articleId, function(err, article) {
 			if (err) {
@@ -186,9 +191,9 @@ module.exports = {
 							return next(err);
 						}
 						return res.json({
-							r : 0,
-							msg : "删除文章成功",
-							article : article
+							r: 0,
+							msg: "删除文章成功",
+							article: article
 						});
 					});
 				});
@@ -200,7 +205,7 @@ module.exports = {
 	 * @method findArticlesByUserIdAndPage
 	 * 分页查找某个用户的文章
 	 */
-	findArticlesByUserIdAndPage : function(req, res, next) {
+	findArticlesByUserIdAndPage: function(req, res, next) {
 		var userId = req.params._id;
 		var query = req.query;
 		var pageSize = Number(query.pageSize) || 20;
@@ -213,9 +218,9 @@ module.exports = {
 				return next(err);
 			}
 			return res.json({
-				r : 0,
-				msg : "分页查找某个用户的文章成功",
-				articles : articles
+				r: 0,
+				msg: "分页查找某个用户的文章成功",
+				articles: articles
 			});
 		});
 	},
@@ -224,7 +229,7 @@ module.exports = {
 	 * @method findArticlesByTimeAndPage
 	 * 分页查找最新发布的文章
 	 */
-	findArticlesByTimeAndPage : function(req, res, next) {
+	findArticlesByTimeAndPage: function(req, res, next) {
 		var query = req.query;
 		var pageSize = Number(query.pageSize) || 20;
 		var pageStart = Number(query.pageStart) || 0;
@@ -236,9 +241,9 @@ module.exports = {
 				return next(err);
 			}
 			return res.json({
-				r : 0,
-				msg : "分页查询成功",
-				articles : articles
+				r: 0,
+				msg: "分页查询成功",
+				articles: articles
 			});
 		});
 	},
@@ -247,7 +252,7 @@ module.exports = {
 	 * @method likeArticle
 	 * 喜欢文章
 	 */
-	likeArticle : function(req, res, next) {
+	likeArticle: function(req, res, next) {
 		var articleId = req.params._id;
 		var userId = auth.getUserId(req, res);
 
@@ -257,9 +262,9 @@ module.exports = {
 			}
 			if (articleLike) {
 				return res.json({
-					r : 1,
-					errcode : 10017,
-					msg : ERRCODE[10017]
+					r: 1,
+					errcode: 10017,
+					msg: ERRCODE[10017]
 				});
 			} else {
 				ArticleLike.newArticleLike(userId, articleId, function(err, articleLike) {
@@ -267,9 +272,9 @@ module.exports = {
 						return next(err);
 					}
 					return res.json({
-						r : 0,
-						msg : "喜欢成功",
-						articleLike : articleLike
+						r: 0,
+						msg: "喜欢成功",
+						articleLike: articleLike
 					});
 				});
 			}
@@ -280,7 +285,7 @@ module.exports = {
 	 * @method unLikeArticle
 	 * 取消喜欢文章
 	 */
-	unLikeArticle : function(req, res, next) {
+	unLikeArticle: function(req, res, next) {
 		var articleId = req.params._id;
 		var userId = auth.getUserId(req, res);
 
@@ -294,15 +299,15 @@ module.exports = {
 						return next(err);
 					}
 					return res.json({
-						r : 0,
-						msg : "取消喜欢成功"
+						r: 0,
+						msg: "取消喜欢成功"
 					});
 				});
 			} else {
 				return res.json({
-					r : 1,
-					errcode : 10018,
-					msg : ERRCODE[10018]
+					r: 1,
+					errcode: 10018,
+					msg: ERRCODE[10018]
 				});
 			}
 		});
@@ -312,7 +317,7 @@ module.exports = {
 	 * @method findByArticleIdAndPage
 	 * 分页查询某篇文章的喜欢记录
 	 */
-	findByArticleIdAndPage : function(req, res, next) {
+	findByArticleIdAndPage: function(req, res, next) {
 		var articleId = req.params._id;
 		var pageSize = req.query.pageSize;
 		var pageStart = req.query.pageStart;
@@ -323,25 +328,93 @@ module.exports = {
 			}
 			res.type('json');
 			return res.json({
-				r : 0,
-				msg : "查找记录成功",
-				articleLikes : articleLikes
+				r: 0,
+				msg: "查找记录成功",
+				articleLikes: articleLikes
 			});
 		});
 	},
 
+	/**
+	 * @method newArticleComment
+	 * 新建一条文章评论
+	 */
+	newArticleComment: function(req, res, next) {
+		var content = req.body.content;
+		if (!content) {
+			return res.json({
+				r: 1,
+				errcode: 10022,
+				msg: ERRCODE[10022]
+			});
+		}
+		var articleId = req.params._id;
+		var userId = auth.getUserId(req, res);
+		content = xss(content);
+		ArticleComment.newComment(content, userId, articleId, function(err, comment) {
+			if (err) {
+				return next(err);
+			}
+			return res.json({
+				r: 0,
+				msg: "评论成功",
+				comment: comment
+			});
+		});
+	},
+
+	/**
+	 * @method deleteCommentById
+	 * 删除评论
+	 */
+	deleteCommentById: function(req, res, next) {
+		var _id = req.params._id;
+		ArticleComment.findByIdAndRemove(_id, function(err, comment) {
+			if (err) {
+				return next(err);
+			}
+			return res.json({
+				r: 0,
+				msg: "删除成功"
+			});
+		});
+	},
+
+	/**
+	 * @method findCommentsByArticleIdAndPage
+	 * 分页查询某篇文章的评论
+	 */
+	findCommentsByArticleIdAndPage: function(req, res, next) {
+		var articleId = req.params._id;
+		var pageSize = req.query.pageSize || 10;
+		var pageStart = req.query.pageStart || 0;
+		ArticleComment.findByArticleIdAndPage(articleId, pageSize, pageStart, function(err, comments) {
+			if (err) {
+				return next(err);
+			}
+			res.type('json');
+			return res.json({
+				r: 0,
+				msg: '分页查询文章评论成功',
+				comments: comments
+			});
+		});
+	},
+
+
+
 	// 我喜欢的
-	findFavourites : function(req, res) {
+	findFavourites: function(req, res) {
 
 	},
 
 	// 分页查询七日热门文章
-	findWeeklyByPage : function(req, res) {
+	findWeeklyByPage: function(req, res) {
 
 	},
 
 	// 分页查询三十日热门文章
-	findMonthlyByPage : function(req, res) {
+	findMonthlyByPage: function(req, res) {
 
 	}
 }

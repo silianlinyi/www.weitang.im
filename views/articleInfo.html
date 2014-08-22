@@ -11,6 +11,12 @@
 		<link rel="stylesheet" href="/css/articleInfo.css" />
 		<link rel="stylesheet" href="/epiceditor/themes/base/epiceditor.css" />
 		<link rel="stylesheet" href="/epiceditor/themes/preview/github.css" />
+		<script>
+			var hasLogin = "{{hasLogin}}";
+			var user = {
+				_id: "{{user._id}}"
+			};
+		</script>
 	</head>
 	<body class="articleInfo page">
 
@@ -31,7 +37,7 @@
 				</div>
 				<div id="articleQrcode"></div>
 				<p>
-					“扫一扫”分享到微信
+					“扫一扫”分享到朋友圈
 				</p>
 				{{#if hasLogin}}
 				<!-- 如果用户已登录 -->
@@ -123,6 +129,7 @@
 					{{article.likesNum}} 个喜欢
 				</a>
 			</div>
+			<!-- 入选专题 -->
 			<div class="ui bottom attached inverted teal basic segment tabItem" data-id="1">
 				<div class="ui horizontal list">
 					{{#each article.belongToCollectionIds}}
@@ -137,6 +144,7 @@
 					{{/each}}
 				</div>
 			</div>
+			<!-- 作者信息 -->
 			<div class="ui bottom attached inverted teal basic segment tabItem hide" data-id="2">
 				<a href="/users/{{article.belongToUserId._id}}">
 					<img class="circular ui small left floated image" src="{{article.belongToUserId.sHeadimgurl}}">
@@ -150,14 +158,27 @@
 					</div>
 				</div>
 			</div>
+			<!-- 评论 -->
 			<div class="ui bottom attached inverted teal basic segment tabItem hide" data-id="3">
-
+				<div class="ui form" style="width: 60%;">
+					<div class="field">
+						<textarea style="height: 50px;" id="commentContent"></textarea>
+					</div>
+					<div class="field">
+						<div class="ui button blue newCommentBtn" id="newCommentBtn">
+							发表
+						</div>
+					</div>
+				</div>
+				<div class="ui comments"></div>
+				<a href="javascript:void(0);" style="color: #fff;text-decoration: none;padding-left: 35px;display: none;" id="loadMoreComments">
+					查看更多<i class="icon double angle down"></i>
+				</a>
 			</div>
+			<!-- 喜欢 -->
 			<div class="ui bottom attached inverted teal basic segment tabItem feed hide" data-id="4">
-				<ul>
-					
-				</ul>
-				<a href="javascript:void(0);" style="color: #fff;text-decoration: none;padding-left: 35px;" id="loadMore">
+				<ul></ul>
+				<a href="javascript:void(0);" style="color: #fff;text-decoration: none;padding-left: 35px;" id="loadMoreLikes">
 					查看更多<i class="icon double angle down"></i>
 				</a>
 			</div>

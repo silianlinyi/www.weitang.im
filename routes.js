@@ -76,6 +76,7 @@ router.get('/favourites', user.showFavourites);
 // 提醒
 router.get('/notifications', notification.showNotifications);
 // 私信 - 收件箱
+router.get('/messages', auth.pageAuth, message.showInbox);
 router.get('/messages/inbox', auth.pageAuth, message.showInbox);
 // 私信 - 发件箱
 router.get('/messages/sent', auth.pageAuth, message.showSent);
@@ -162,6 +163,12 @@ router.get('/api/articles/:_id/likes', article.findByArticleIdAndPage);
 router.post('/api/articles/:_id/add', auth.ajaxAuth, collection.addArticle);
 // 取消收录文章
 router.delete('/api/articles/:_id/unAdd', auth.ajaxAuth, collection.removeArticle);
+// 新建一条文章评论
+router.post('/api/articles/:_id/comment', auth.ajaxAuth, article.newArticleComment);
+// 分页查询某篇文章的评论
+router.get('/api/articles/:_id/comments', article.findCommentsByArticleIdAndPage);
+// 根据评论id删除某一条评论
+router.delete('/api/comments/:_id', auth.ajaxAuth, article.deleteCommentById);
 
 // === 专题操作 ===
 // 新建专题

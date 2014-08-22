@@ -5,12 +5,12 @@ module.exports = {
 	/**
 	 * 新建文章
 	 */
-	newArticle : function(title, content, belongToUserId, belongToNotebookId, callback) {
+	newArticle: function(title, content, belongToUserId, belongToNotebookId, callback) {
 		var article = new Article({
-			title : title,
-			content : content,
-			belongToUserId : belongToUserId,
-			belongToNotebookId : belongToNotebookId
+			title: title,
+			content: content,
+			belongToUserId: belongToUserId,
+			belongToNotebookId: belongToNotebookId
 		});
 		article.save(callback);
 	},
@@ -19,7 +19,7 @@ module.exports = {
 	 * @method deleteArticleById
 	 * 根据文章Id删除某篇文章
 	 */
-	deleteArticleById : function(articleId, callback) {
+	deleteArticleById: function(articleId, callback) {
 		Article.findByIdAndRemove(articleId, callback);
 	},
 
@@ -27,9 +27,9 @@ module.exports = {
 	 * @method deleteAllByNotebookId
 	 * 删除某个文集下的所有文章
 	 */
-	deleteAllByNotebookId : function(notebookId, callback) {
+	deleteAllByNotebookId: function(notebookId, callback) {
 		Article.remove({
-			belongToNotebookId : notebookId
+			belongToNotebookId: notebookId
 		}, callback);
 	},
 
@@ -37,7 +37,7 @@ module.exports = {
 	 * @method findArticleById
 	 * 根据文章Id查询某个文章
 	 */
-	findArticleById : function(_id, callback) {
+	findArticleById: function(_id, callback) {
 		var query = Article.findById(_id);
 		query.populate('belongToUserId', '_id nickname intro sHeadimgurl');
 		query.populate('belongToNotebookId', '_id name');
@@ -48,28 +48,28 @@ module.exports = {
 	/**
 	 * 根据文章名查询
 	 */
-	findArticlesByTitle : function(title, callback) {
+	findArticlesByTitle: function(title, callback) {
 		Article.find({
-			title : new RegExp(title, 'gi')
+			title: new RegExp(title, 'gi')
 		}, callback);
 	},
 
 	/**
 	 * 查询某个文集下的所有文章
 	 */
-	findAllByNotebookId : function(belongToNotebookId, callback) {
+	findAllByNotebookId: function(belongToNotebookId, callback) {
 		Article.find({
-			belongToNotebookId : belongToNotebookId
+			belongToNotebookId: belongToNotebookId
 		}).sort('-createTime').exec(callback);
 	},
 
 	/**
 	 * 查询某个文集下的所有文章（已发布）
 	 */
-	findAllPublishedByNotebookId : function(belongToNotebookId, callback) {
+	findAllPublishedByNotebookId: function(belongToNotebookId, callback) {
 		Article.find({
-			belongToNotebookId : belongToNotebookId,
-			status : 1
+			belongToNotebookId: belongToNotebookId,
+			status: 1
 		}).sort('-createTime').exec(callback);
 	},
 
@@ -77,14 +77,14 @@ module.exports = {
 	 * @method updateArticleById
 	 * 更新文章
 	 */
-	updateArticleById : function(articleId, title, content, intro, wordsNum, callback) {
+	updateArticleById: function(articleId, title, content, intro, wordsNum, callback) {
 		Article.findByIdAndUpdate(articleId, {
-			$set : {
-				title : title,
-				content : content,
-				intro : intro,
-				wordsNum : wordsNum,
-				updateTime : Date.now()
+			$set: {
+				title: title,
+				content: content,
+				intro: intro,
+				wordsNum: wordsNum,
+				updateTime: Date.now()
 			}
 		}, callback);
 	},
@@ -92,10 +92,10 @@ module.exports = {
 	/**
 	 * 发布 / 取消发布文章
 	 */
-	updateStatus : function(_id, status, callback) {
+	updateStatus: function(_id, status, callback) {
 		Article.findByIdAndUpdate(_id, {
-			$set : {
-				status : status
+			$set: {
+				status: status
 			}
 		}, callback);
 	},
@@ -104,10 +104,10 @@ module.exports = {
 	 * @method updateViewsNum
 	 * 更新文章被查看次数
 	 */
-	updateViewsNum : function(_id, num, callback) {
+	updateViewsNum: function(_id, num, callback) {
 		Article.findByIdAndUpdate(_id, {
-			$inc : {
-				viewsNum : num
+			$inc: {
+				viewsNum: num
 			}
 		}, callback);
 	},
@@ -116,10 +116,22 @@ module.exports = {
 	 * @method updateLikesNum
 	 * 更新文章喜欢次数
 	 */
-	updateLikesNum : function(_id, num, callback) {
+	updateLikesNum: function(_id, num, callback) {
 		Article.findByIdAndUpdate(_id, {
-			$inc : {
-				likesNum : num
+			$inc: {
+				likesNum: num
+			}
+		}, callback);
+	},
+
+	/**
+	 * @method updateCommentsNum
+	 * 更新文章评论个数
+	 */
+	updateCommentsNum: function(_id, num, callback) {
+		Article.findByIdAndUpdate(_id, {
+			$inc: {
+				commentsNum: num
 			}
 		}, callback);
 	},
@@ -128,10 +140,10 @@ module.exports = {
 	 * @method addBelongToCollectionIds
 	 * 收录文章时，往belongToCollectionIds数组添加一个collectionId
 	 */
-	addBelongToCollectionIds : function(_id, collectionId, callback) {
+	addBelongToCollectionIds: function(_id, collectionId, callback) {
 		Article.findByIdAndUpdate(_id, {
-			$addToSet : {
-				belongToCollectionIds : collectionId
+			$addToSet: {
+				belongToCollectionIds: collectionId
 			}
 		}, callback);
 	},
@@ -140,10 +152,10 @@ module.exports = {
 	 * @method pullBelongToCollectionIds
 	 * 取消收录文章时，删除belongToCollectionIds数组中对应的一个collectionId
 	 */
-	pullBelongToCollectionIds : function(_id, collectionId, callback) {
+	pullBelongToCollectionIds: function(_id, collectionId, callback) {
 		Article.findByIdAndUpdate(_id, {
-			$pull : {
-				belongToCollectionIds : collectionId
+			$pull: {
+				belongToCollectionIds: collectionId
 			}
 		}, callback);
 	},
@@ -152,16 +164,16 @@ module.exports = {
 	 * @method findByUserIdAndPage
 	 * 分页查找某用户的文章
 	 */
-	findByUserIdAndPage : function(userId, pageSize, pageStart, sortBy, status, callback) {
+	findByUserIdAndPage: function(userId, pageSize, pageStart, sortBy, status, callback) {
 		var query;
 		if (status) {
 			query = Article.find({
-				belongToUserId : userId,
-				status : status
+				belongToUserId: userId,
+				status: status
 			});
 		} else {
 			query = Article.find({
-				belongToUserId : userId
+				belongToUserId: userId
 			});
 		}
 		query.limit(pageSize).skip(pageStart).sort(sortBy);
@@ -175,11 +187,11 @@ module.exports = {
 	 * @method findBypage
 	 * 分页查询
 	 */
-	findBypage : function(pageSize, pageStart, sortBy, status, callback) {
+	findBypage: function(pageSize, pageStart, sortBy, status, callback) {
 		var query = Article.find({
-			status : status
+			status: status
 		}, {
-			content : 0
+			content: 0
 		}).limit(pageSize).skip(pageStart).sort(sortBy);
 		query.populate('belongToUserId', '_id nickname sHeadimgurl');
 		query.populate('belongToNotebookId', '_id name');
