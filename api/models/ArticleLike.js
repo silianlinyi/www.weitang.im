@@ -18,4 +18,15 @@ var ArticleLikeSchema = new Schema({
     }
 });
 
+ArticleLikeSchema.statics = {
+	
+	/**
+	 * @method removeAllByArticleId
+	 */
+	removeAllByArticleId: function(articleId, callback) {
+		
+	}
+	
+};
+
 module.exports = mongoose.model("ArticleLike", ArticleLikeSchema, "wt_article_likes");

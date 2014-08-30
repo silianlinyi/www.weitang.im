@@ -15,7 +15,7 @@ define(['iAlert'], function(iAlert) {
 		temp += '<a href="/articles/' + article._id + '" class="content" target="_blank">' + article.intro + '</a>';
 		temp += '<div class="article-info">';
 		temp += '<i class="book black small icon"></i>';
-		temp += '<a class="notebook" href="/notebooks/' + article.belongToNotebookId._id + '/latest">' + article.belongToNotebookId.name + '</a>&nbsp;';
+		temp += '<a class="notebook" href="/notebooks/' + article.belongToNotebookId._id + '" target="_blank">' + article.belongToNotebookId.name + '</a>&nbsp;';
 
 		var len = article.belongToCollectionIds.length;
 		// 只显示前3个专题信息

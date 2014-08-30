@@ -1,0 +1,43 @@
+<div class="four wide column">
+	<div class="ui black large header">
+		{{notebook.name}}
+	</div>
+	<div class="ui horizontal bulleted list">
+		<a class="item" href="/notebooks/{{notebook._id}}">
+			{{notebook.articlesNum}} 篇文章
+		</a>
+		<a class="item" href="/notebooks/{{notebook._id}}/subscribers">
+			{{notebook.subsNum}} 人订阅
+		</a>
+	</div>
+	<div class="ui small buttons">
+		{{! 用户已登录 }}
+		{{#if hasLogin}}
+		{{#if notebook.hasSub}}
+		<div class="ui button small red unSubBtn" data-id="{{notebook._id}}">
+			<i class="icon checkmark"></i>正在订阅
+		</div>
+		{{else}}
+		<div class="ui button small subBtn" data-id="{{notebook._id}}">
+			<i class="icon add"></i>添加订阅
+		</div>
+		{{/if}}
+		{{! 用户未登录 }}
+		{{else}}
+		<div class="ui button small notLogin">
+			<i class="icon add"></i>添加订阅
+		</div>
+		{{/if}}
+	</div>
+	<p class="metadata">
+		{{#if notebook.belongToUserId.sHeadimgurl }}
+			<img src="{{notebook.belongToUserId.sHeadimgurl}}" class="ui avatar image" /><br />
+		{{else}}
+			<img src="/img/default_avatar.png" class="ui avatar image" /><br />
+		{{/if}}
+		
+		<a href="/users/{{notebook.belongToUserId._id}}">
+			{{notebook.belongToUserId.nickname}}
+		</a> 著
+	</p>
+</div>

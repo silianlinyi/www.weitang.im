@@ -14,6 +14,8 @@
     background: url(/img/default_avatar.png);
     background-size: cover;
     border: none;
+    width: 100px;
+    height: 100px;
 }
 .four.wide.column .ui.header .sub {
     margin-top: 5px;
@@ -73,8 +75,28 @@
 .articleList .article-info a {
     text-decoration: none;
 }
+.articleList .article-info a:hover {
+    color: #e58c7c !important;
+}
 .loadMore {
     font-weight: normal !important;
     cursor: pointer;
     display: none;
+}
+
+/* 用户 - 关注 */
+.nine.wide.column .list .item {
+    color: gray;
+}
+.nine.wide.column .list .item .header {
+    line-height: 25px !important;
+    color: #333333;
+    display: block;
+}
+.nine.wide.column .list .item .image {
+    width: 40px;
+    height: 40px;
+}
+.nine.wide.column .list .item a {
+    text-decoration: none;
 }

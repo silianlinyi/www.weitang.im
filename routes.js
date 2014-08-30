@@ -47,7 +47,9 @@ router.get('/collections/new', auth.pageAuth, collection.showNew);
 // 专题 - 全部专题
 router.get('/collections', collection.showCollections);
 // 专题详情 - 最新文章
-router.get('/collections/:_id', collection.showCollectionByTime);
+router.get('/collections/:_id', collection.showCollectionInfo);
+// 专题 - 订阅用户
+router.get('/collections/:_id/subscribers', collection.showCollectionInfo);
 // 微糖热门 - 七日热门文章
 router.get('/top/weekly', article.showWeekly);
 // 微糖热门 - 三十日热门文章
@@ -60,13 +62,18 @@ router.get('/timeline/latest', timeline.showLatest);
 router.get('/bookmarks', bookmark.showBookmarks);
 // 写文章
 router.get('/write', auth.pageAuth, site.showWrite);
-// 我的主页 - 关注
-router.get('/users/:_id/following', user.showFollowing);
-// 我的主页 - 粉丝
-router.get('/users/:_id/followers', user.showFollowers);
+// 我的主页
+router.get('/users/:_id', user.showUserInfo);
 // 我的主页 - 最新文章
-router.get('/users/:_id', user.showLatestArticles);
-router.get('/users/:_id/latestArticles', user.showLatestArticles);
+router.get('/users/:_id/latestArticles', user.showUserInfo);
+// 我的主页 - 订阅
+router.get('/users/:_id/subscriptions', user.showUserInfo);
+// 我的主页 - 关注
+router.get('/users/:_id/following', user.showUserInfo);
+// 我的主页 - 粉丝
+router.get('/users/:_id/followers', user.showUserInfo);
+// 我的主页 - 我喜欢的文章
+router.get('/users/:_id/favourites', user.showUserInfo);
 // 我的主页 - 最新动态
 router.get('/users/:_id/timeline', user.showTimeline);
 // 我的主页 - 热门文章
@@ -90,6 +97,10 @@ router.get('/articles/:_id', article.showArticleInfo);
 router.get('/settings', auth.pageAuth, user.showSettingsIndex);
 // 设置-修改密码
 router.get('/settings/password', auth.pageAuth, site.showSettingsPassword);
+// 文集 - 主页
+router.get('/notebooks/:_id', notebook.showNotebookInfo);
+// 文集 - 订阅用户
+router.get('/notebooks/:_id/subscribers', notebook.showNotebookInfo);
 
 
 /**
@@ -124,19 +135,34 @@ router.put('/api/users/password', auth.ajaxAuth, user.updatePassword);
 router.put('/api/users/info', auth.ajaxAuth, user.updateUserInfo);
 // 根据用户昵称搜索用户
 router.get('/api/users/nickname', user.findUsersByNickname);
+// 关注用户
+router.post('/api/users/:_id/following', auth.ajaxAuth, user.followingUser);
+// 取消关注用户
+router.delete('/api/users/:_id/unFollowing', auth.ajaxAuth, user.unFollowingUser);
+// 分页查询用户的关注
+router.get('/api/users/:_id/followings', user.findFollowingsByPage);
+// 分页查询用户的粉丝
+router.get('/api/users/:_id/followers', user.findFollowersByPage);
+
 
 // === 文集操作 ===
 // 新建文集
 router.post('/api/notebooks', auth.ajaxAuth, notebook.newNotebook);
-
 // 查找当前会话用户的所有文集
 router.get('/api/notebooks/mine', auth.ajaxAuth, notebook.findAllMyNotebooks);
 // 查找某用户的所有文集
 router.get('/api/users/:_id/notebooks', notebook.findAllNotebooksByUserId);
 // 更新某个文集
 router.put('/api/notebooks/:_id', auth.ajaxAuth, notebook.updateNotebookById);
-// 删除某个文集
-router.delete('/api/notebooks/:_id', auth.ajaxAuth, notebook.deleteNotebookById);
+// 订阅文集
+router.post('/api/notebooks/:_id/sub', auth.ajaxAuth, notebook.subNotebook);
+// 取消订阅文集
+router.delete('/api/notebooks/:_id/unSub', auth.ajaxAuth, notebook.unSubNotebook);
+// 查询某用户订阅的所有文集
+router.get('/api/users/:_id/subs', notebook.findAllSubNotebooksByUserId);
+// 分页查询某个文集下的订阅用户
+router.get('/api/notebooks/:_id/subscribers', notebook.findUsersByNotebookIdAndPage);
+
 
 // === 文章操作 ===
 // 新建一篇文章
@@ -169,6 +195,8 @@ router.post('/api/articles/:_id/comment', auth.ajaxAuth, article.newArticleComme
 router.get('/api/articles/:_id/comments', article.findCommentsByArticleIdAndPage);
 // 根据评论id删除某一条评论
 router.delete('/api/comments/:_id', auth.ajaxAuth, article.deleteCommentById);
+// 分页查询某个专题下的最新文章
+router.get('/api/collections/:_id/articles', article.findArticlesByCollectionIdAndPage);
 
 // === 专题操作 ===
 // 新建专题
@@ -187,6 +215,8 @@ router.get('/api/collections/search', collection.findCollectionsByKey);
 router.get('/api/users/:_id/collections', collection.findAllCollectionsByUserId);
 // 我创建的所有专题，并且返回当前文章是否已经收录信息
 router.get('/api/collections/mine/with', auth.ajaxAuth, collection.findAllMyCollectionsWith);
+// 分页查询某个专题下的订阅用户
+router.get('/api/collections/:_id/subscribers', collection.findUsersByCollectionIdAndPage);
 
 // === 私信操作 ===
 // 新建一封私信

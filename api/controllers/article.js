@@ -1,12 +1,16 @@
 var xss = require('xss');
 var marked = require('marked');
-var Util = require('../common/util');
+
 var Article = require('../proxy/article');
 var ArticleLike = require('../proxy/articleLike');
 var ArticleComment = require('../proxy/articleComment');
+var ArticleView = require('../proxy/articleView');
+var ArticleColl = require('../proxy/articleColl');
 var User = require('../proxy/user');
 var Notebook = require('../proxy/notebook');
+
 var auth = require('../policies/auth');
+var Util = require('../common/util');
 var ERRCODE = require('../../errcode');
 
 module.exports = {
@@ -68,6 +72,25 @@ module.exports = {
 		} else {
 			cb();
 		}
+		// 请求用户IP地址
+		var ip = req.ip;
+		ArticleView.findOne(_id, ip, function(err, doc) {
+			if (err) {
+				return next(err);
+			}
+			if (!doc) {
+				ArticleView.newArticleView(_id, ip, function(err, doc) {
+					if (err) {
+						return next(err);
+					}
+					if (doc) {
+						console.log('增加一条文章查看记录');
+					}
+				});
+			} else {
+				console.log('该IP已有记录');
+			}
+		});
 	},
 
 	/**
@@ -401,7 +424,28 @@ module.exports = {
 		});
 	},
 
+	/**
+	 * @method findArticlesByCollectionIdAndPage
+	 * 分页查询某个专题下的最新文章
+	 */
+	findArticlesByCollectionIdAndPage: function(req, res, next) {
+		var collectionId = req.params._id;
+		var query = req.query;
+		var pageSize = Number(query.pageSize) || 15;
+		var pageStart = Number(query.pageStart) || 0;
+		var sortBy = '-createTime';
 
+		ArticleColl.findByCollectionIdAndPage(collectionId, pageSize, pageStart, sortBy, function(err, articles) {
+			if (err) {
+				return next(err);
+			}
+			return res.json({
+				r: 0,
+				msg: "查询成功",
+				articles: articles
+			});
+		});
+	},
 
 	// 我喜欢的
 	findFavourites: function(req, res) {

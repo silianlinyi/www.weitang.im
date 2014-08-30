@@ -1,0 +1,114 @@
+<!-- latestArticles.html、following.html -->
+<div class="four wide column userPanel">
+	<div class="ui red header">
+		<a href="/users/{{u._id}}"><img class="ui circular image" src="{{u.headimgurl}}" /></a>
+		<a href="/users/{{u._id}}">{{u.nickname}}</a>
+		<div class="sub header">
+			{{u.intro}}
+		</div>
+	</div>
+	<!--<ul>
+		<li>
+			<img src="/img/weixin.png" width="30" height="30" />
+		</li>
+	</ul>-->
+	<div class="ui divided horizontal list">
+		<a class="item" href="/users/{{u._id}}/subscriptions">
+			{{totalSubNum}} 订阅
+		</a>
+		<a class="item" href="/users/{{u._id}}/following">
+			{{u.followingNum}} 关注
+		</a>
+		<a class="item" href="/users/{{u._id}}/followers">
+			{{u.followersNum}} 粉丝
+		</a>
+	</div>
+
+	<div class="ui divided horizontal list">
+		<a class="item" href="/users/{{u._id}}/latestArticles">
+			{{u.articlesNum}} 文章
+		</a>
+		<div class="item">
+			{{u.likesNum}} 喜欢
+		</div>
+		<div class="item">
+			{{u.wordsNum}} 字数
+		</div>
+	</div>
+	
+	{{#if hasLogin}}
+		<!-- 用户已经登录 -->
+		{{#if isMyself}}
+		{{else}}
+		<div class="ui small buttons">
+			{{#if hasFollow}}
+			<div class="ui button red unFollowingBtn" data-id="{{u._id}}">
+				<i class="icon checkmark"></i>正在关注
+			</div>
+			{{else}}
+			<div class="ui button followingBtn" data-id="{{u._id}}">
+				<i class="icon add"></i>关注
+			</div>
+			{{/if}}
+			
+			<div class="or"></div>
+			<a class="ui button" href="/messages/new?toUser={{u.email}}" target="_blank">
+				<i class="icon mail"></i>发私信
+			</a>
+		</div>
+		{{/if}}
+	{{else}}
+		<!-- 用户未登录 -->
+		<div class="ui small buttons">
+			<div class="ui button notLogin">
+				<i class="icon add"></i>关注
+			</div>
+			<div class="or"></div>
+			<div class="ui button notLogin">
+				<i class="icon mail"></i>发私信
+			</div>
+		</div>
+	{{/if}}
+
+	<div class="ui list" style="text-align: left;padding: 25px;">
+		<div class="item">
+			<div class="content">
+				<div class="header">
+					我的文集（{{u.notebooksNum}}）
+				</div>
+			</div>
+			<div class="list notebooks">
+				{{#each notebooks}}
+				<div class="item">
+					<i class="book icon"></i>
+					<div class="content">
+						<a class="" href="/notebooks/{{_id}}">
+							{{name}}
+						</a>
+					</div>
+				</div>
+				{{/each}}
+			</div>
+		</div>
+		<div class="item">
+			<div class="content">
+				<div class="header">
+					我的专题（{{u.collNum}}）
+				</div>
+			</div>
+			<div class="list collections">
+				{{#each collections}}
+				<div class="item">
+					<i class="icon grid layout"></i>
+					<div class="content">
+						<a class="" href="/collections/{{_id}}">
+							{{name}}
+						</a>
+					</div>
+				</div>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+
+</div>

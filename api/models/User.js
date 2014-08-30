@@ -31,6 +31,7 @@ var config = require('../../config');
  * collNum		已创建的专题个数
  * subNum		订阅的专题个数
  * notebooksNum	创建的文集个数
+ * subNotebooksNum 订阅的文集个数
  * headimgurl	头像地址
  * sHeadimgurl	头像小缩略图地址
  * createTime	加入时间
@@ -42,157 +43,209 @@ var config = require('../../config');
  * activeToken	激活帐号token
  */
 var UserSchema = new Schema({
-    email: {
-    	type: String,
-        unique: true,
-        index: true
-    },
-    nickname: {
-    	type: String
-    },
-    password: {
-    	type: String
-    },
-    phone: {
-        type: String,
-        default: ''
-    },
-    sex: {
-        type: Number,
-        default: 0
-    },
-    birthday: {
-        type: Number,
-        default: 0
-    },
-    qq: {
-        type: String,
-        default: ''
-    },
-    province: {
-        type: String,
-        default: ''
-    },
-    city: {
-        type: String,
-        default: ''
-    },
-    company: {
-        type: String,
-        default: ''
-    },
-    job: {
-        type: String,
-        default: ''
-    },
-    school: {
-        type: String,
-        default: ''
-    },
-    profession: {
-        type: String,
-        default: ''
-    },
-    url: {
-    	type: String,
-        default: ''
-    },
-    intro: {
-    	type: String,
-    	default: ''
-    },
-    WXQrcodeUrl: {
-    	type: String,
-    	default: ''
-    },
-    followingNum: {
-    	type: Number,
-    	default: 0
-    },
-    followersNum: {
-    	type: Number,
-    	default: 0
-    },
-    articlesNum: {
-    	type: Number,
-    	default: 0
-    },
-    wordsNum: {
-    	type: Number,
-    	default: 0
-    },
-    likesNum: {
-    	type: Number,
-    	default: 0
-    },
-    collLimitNum: {
-    	type: Number,
-    	default: config.COLLECTIONS_LIMIT_NUM
-    },
-    collNum: {
-    	type: Number,
-    	default: 0
-    },
-    subNum: {
-    	type: Number,
-    	default: 0
-    },
-    subNoteNum: {
-    	type: Number,
-    	default: 0
-    },
-    notebooksNum: {
-    	type: Number,
-    	default: 0
-    },
-    headimgurl: {
-        type: String,
-        default: ''
-    },
-    sHeadimgurl: {
-    	type: String,
-        default: ''
-    },
-    createTime: {
-        type: Number,
-        default: Date.now
-    },
-    updateTime: {
-        type: Number,
-        default: Date.now
-    },
-    resetTicket: {
-        type: Number,
-        default: 0
-    },
-    resetToken: {
-        type: String,
-        default: ''
-    },
-    openId: {
-        type: String,
-        default: ''
-    },
-    activeTicket: {
-    	type: Number,
-        default: 0
-    },
-    activeToken: {
-    	type: String,
-        default: ''
-    }
-    
+	email: {
+		type: String,
+		unique: true,
+		index: true
+	},
+	nickname: {
+		type: String
+	},
+	password: {
+		type: String
+	},
+	phone: {
+		type: String,
+		default: ''
+	},
+	sex: {
+		type: Number,
+		default: 0
+	},
+	birthday: {
+		type: Number,
+		default: 0
+	},
+	qq: {
+		type: String,
+		default: ''
+	},
+	province: {
+		type: String,
+		default: ''
+	},
+	city: {
+		type: String,
+		default: ''
+	},
+	company: {
+		type: String,
+		default: ''
+	},
+	job: {
+		type: String,
+		default: ''
+	},
+	school: {
+		type: String,
+		default: ''
+	},
+	profession: {
+		type: String,
+		default: ''
+	},
+	url: {
+		type: String,
+		default: ''
+	},
+	intro: {
+		type: String,
+		default: ''
+	},
+	WXQrcodeUrl: {
+		type: String,
+		default: ''
+	},
+	followingNum: {
+		type: Number,
+		default: 0
+	},
+	followersNum: {
+		type: Number,
+		default: 0
+	},
+	articlesNum: {
+		type: Number,
+		default: 0
+	},
+	wordsNum: {
+		type: Number,
+		default: 0
+	},
+	likesNum: {
+		type: Number,
+		default: 0
+	},
+	collLimitNum: {
+		type: Number,
+		default: config.COLLECTIONS_LIMIT_NUM
+	},
+	collNum: {
+		type: Number,
+		default: 0
+	},
+	subNum: {
+		type: Number,
+		default: 0
+	},
+	subNoteNum: {
+		type: Number,
+		default: 0
+	},
+	notebooksNum: {
+		type: Number,
+		default: 0
+	},
+	subNotebooksNum: {
+		type: Number,
+		default: 0
+	},
+	headimgurl: {
+		type: String,
+		default: ''
+	},
+	sHeadimgurl: {
+		type: String,
+		default: ''
+	},
+	createTime: {
+		type: Number,
+		default: Date.now
+	},
+	updateTime: {
+		type: Number,
+		default: Date.now
+	},
+	resetTicket: {
+		type: Number,
+		default: 0
+	},
+	resetToken: {
+		type: String,
+		default: ''
+	},
+	openId: {
+		type: String,
+		default: ''
+	},
+	activeTicket: {
+		type: Number,
+		default: 0
+	},
+	activeToken: {
+		type: String,
+		default: ''
+	}
+
 });
 
 
 // 添加实例方法
 UserSchema.methods = {
-	
+
 };
 
 // 添加静态方法
 UserSchema.statics = {
-    
+
+	/**
+	 * @method updateLikesNum
+	 * 修改喜欢的文章数
+	 */
+	updateLikesNum: function(_id, num, callback) {
+		this.findByIdAndUpdate(_id, {
+			$inc: {
+				likesNum: num
+			}
+		}, callback);
+	},
+
+	/**
+	 * @method updateNotebooksNum
+	 * 修改已创建的文集数量
+	 */
+	updateNotebooksNum: function(_id, num, callback) {
+		this.findByIdAndUpdate(_id, {
+			$inc: {
+				notebooksNum: num
+			}
+		}, callback);
+	},
+	
+	/**
+	 * @method updateSubNoteNum
+	 * 修改订阅的文集数量
+	 */
+	updateSubNoteNum : function(_id, num, callback) {
+		this.findByIdAndUpdate(_id, {
+			$inc : {
+				subNoteNum : num
+			}
+		}, callback);
+	},
+
+	/**
+	 * @method updateWordsNum
+	 * 修改用户总字数
+	 */
+	updateWordsNum: function(_id, num, callback) {
+		this.findByIdAndUpdate(_id, {
+			$inc: {
+				wordsNum: num
+			}
+		}, callback);
+	}
+
 };
 
 module.exports = mongoose.model("User", UserSchema, "wt_users");

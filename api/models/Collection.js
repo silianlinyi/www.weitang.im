@@ -69,4 +69,20 @@ var CollectionSchema = new Schema({
     }
 });
 
+CollectionSchema.statics = {
+	
+	/**
+	 * @method updateArticlesNum
+	 * 修改专题下的文章数
+	 */
+	updateArticlesNum : function(_id, num, callback) {
+		this.findByIdAndUpdate(_id, {
+			$inc : {
+				articlesNum : num
+			}
+		}, callback);
+	}
+	
+};
+
 module.exports = mongoose.model("Collection", CollectionSchema, "wt_collections");

@@ -24,10 +24,10 @@
 			{{> user_panel }}
 			<div class="nine wide column">
 				<div class="ui secondary red pointing menu">
-					<a class="item" href="/users/{{u._id}}/subscriptions">
+					<a class="active item" href="/users/{{u._id}}/subscriptions">
 						订阅({{totalSubNum}})
 					</a>
-					<a class="active item" href="/users/{{u._id}}/following">
+					<a class="item" href="/users/{{u._id}}/following">
 						关注({{u.followingNum}})
 					</a>
 					<a class="item" href="/users/{{u._id}}/followers">
@@ -45,7 +45,7 @@
 		<script src="/lib/jquery.js"></script>
 		<script src="/lib/semantic.js"></script>
 		<script src="/lib/jquery.qrcode.min.js"></script>
-		<script data-main="/js/following" src="/lib/require.js"></script>
+		<script data-main="/js/subscriptions" src="/lib/require.js"></script>
 
 		{{#if hasLogin }} {{else}} {{> login_modal }} {{/if}}
 	</body>

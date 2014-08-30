@@ -104,17 +104,7 @@ module.exports = {
 		}, callback);
 	},
 
-	/**
-	 * @method updateLikesNum
-	 * 修改喜欢的文章数
-	 */
-	updateLikesNum : function(_id, num, callback) {
-		User.findByIdAndUpdate(_id, {
-			$inc : {
-				likesNum : num
-			}
-		}, callback);
-	},
+	
 
 	/**
 	 * @method updateCollLimitNum
@@ -150,30 +140,6 @@ module.exports = {
 		User.findByIdAndUpdate(_id, {
 			$inc : {
 				subNum : num
-			}
-		}, callback);
-	},
-
-	/**
-	 * @method updateSubNoteNum
-	 * 修改订阅的文集数量
-	 */
-	updateSubNoteNum : function(_id, num, callback) {
-		User.findByIdAndUpdate(_id, {
-			$inc : {
-				subNoteNum : num
-			}
-		}, callback);
-	},
-
-	/**
-	 * @method updateNotebooksNum
-	 * 修改已创建的文集数量
-	 */
-	updateNotebooksNum : function(_id, num, callback) {
-		User.findByIdAndUpdate(_id, {
-			$inc : {
-				notebooksNum : num
 			}
 		}, callback);
 	},

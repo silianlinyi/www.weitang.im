@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongostore')(session);
 var hbs = require('hbs');
+var compression = require('compression');
 var config = require('./config');
 var routes = require('./routes');
 
@@ -40,6 +41,9 @@ app.use(session({
 	}
 }));
 
+// compress responses
+app.use(compression());
+
 app.use(function(req, res, next) {
 	var user = req.session.user;
 	if (!!user) {
@@ -51,6 +55,8 @@ app.use(function(req, res, next) {
 	}
 	next();
 });
+
+
 
 // 路由
 app.use('/', routes);

@@ -3,38 +3,30 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-		<title>{{u.nickname}} | 微糖</title>
-		<link rel="stylesheet" type="text/css" href="/css/semantic.css" />
+		<title>{{notebook.name}} | 微糖</title>
+		<link rel="stylesheet" type="text/css" href="/css/semantic.min.css" />
 		<link rel="stylesheet" type="text/css" href="/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="/css/common2.css" />
-
+		<link rel="stylesheet" href="/css/notebook.css" />
 		<script>
 			var GNS = {
-				u: {
-					_id: "{{u._id}}"
+				notebook: {
+					_id: "{{notebook._id}}"
 				}
 			}
 		</script>
 	</head>
-	<body class="">
-
+	<body>
 		{{> menu }}
-
 		<div class="ui grid">
-			{{> user_panel }}
+			{{> notebook_panel }}
 			<div class="nine wide column">
 				<div class="ui secondary red pointing menu">
-					<a class="item" href="/users/{{u._id}}/subscriptions">
-						订阅({{totalSubNum}})
-					</a>
-					<a class="active item" href="/users/{{u._id}}/following">
-						关注({{u.followingNum}})
-					</a>
-					<a class="item" href="/users/{{u._id}}/followers">
-						粉丝({{u.followersNum}})
-					</a>
+					<div class="active item">{{notebook.subsNum}} 人订阅</div>
 				</div>
-				<div class="ui divided list followingList" id="followingList"></div>
+				<div class="ui divided list userList" id="userList">
+					
+				</div>
 				<div class="ui header black center aligned loadMore" id="loadMore">
 					加载更多
 				</div>
@@ -42,12 +34,15 @@
 		</div>
 
 		<script src="/lib/modernizr.js"></script>
-		<script src="/lib/jquery.js"></script>
+		<script src="/lib/jquery.min.js"></script>
 		<script src="/lib/semantic.js"></script>
 		<script src="/lib/jquery.qrcode.min.js"></script>
-		<script data-main="/js/following" src="/lib/require.js"></script>
+		<script data-main="/js/subscribersOfNotebook" src="/lib/require.js"></script>
 
-		{{#if hasLogin }} {{else}} {{> login_modal }} {{/if}}
+		{{#if hasLogin }}
+		{{else}}
+		{{> login_modal }}
+		{{/if}}
+
 	</body>
-
 </html>

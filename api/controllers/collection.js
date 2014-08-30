@@ -18,7 +18,7 @@ module.exports = {
 	 * @method showSub
 	 * 专题 - 我的订阅
 	 */
-	showSub : function(req, res) {
+	showSub: function(req, res) {
 		res.render('mySubCollections');
 	},
 
@@ -26,7 +26,7 @@ module.exports = {
 	 * @method showMine
 	 * 专题 - 我的专题
 	 */
-	showMine : function(req, res) {
+	showMine: function(req, res) {
 		res.render('myCollections');
 	},
 
@@ -34,9 +34,9 @@ module.exports = {
 	 * @method showNew
 	 * 专题 - 新建专题
 	 */
-	showNew : function(req, res) {
+	showNew: function(req, res) {
 		res.render('newCollection', {
-			QINIU_Domain : config.QINIU_Domain
+			QINIU_Domain: config.QINIU_Domain
 		});
 	},
 
@@ -44,19 +44,20 @@ module.exports = {
 	 * @method showCollections
 	 * 专题 - 全部专题
 	 */
-	showCollections : function(req, res) {
+	showCollections: function(req, res) {
 		res.render('collections');
 	},
 
 	/**
-	 * @method showCollectionByTime
+	 * @method showCollectionInfo
 	 * 专题详情 - 最新文章
 	 */
-	showCollectionByTime : function(req, res, next) {
+	showCollectionInfo: function(req, res, next) {
 		var _id = req.params._id;
+		var path = req.route.path;
 
 		if (_id.length !== 24) {
-			res.render('404');
+			return res.render('404');
 		} else {
 			Collection.findCollectionById(_id, function(err, collection) {
 				if (err) {
@@ -66,6 +67,21 @@ module.exports = {
 					return res.render('404');
 				} else {
 					var isLogin = auth.isLogin(req, res);
+
+					function cb() {
+						var params = {
+							r: 0,
+							msg: "查找专题详情成功",
+							collection: collection
+						};
+
+						if (/subscribers/.test(path)) {
+							res.render('subscribers', params);
+						} else {
+							res.render('collectionInfo', params);
+						}
+					}
+
 					if (isLogin) {
 						var userId = auth.getUserId(req, res);
 						CollectionSub.findOne(userId, _id, function(err, collectionSub) {
@@ -75,18 +91,10 @@ module.exports = {
 							if (collectionSub) {
 								collection.hasSub = true;
 							}
-							res.render('collectionInfo', {
-								r : 0,
-								msg : "查找专题详情成功",
-								collection : collection
-							});
+							cb();
 						});
 					} else {
-						res.render('collectionInfo', {
-							r : 0,
-							msg : "查找专题详情成功",
-							collection : collection
-						});
+						cb();
 					}
 				}
 			});
@@ -102,7 +110,7 @@ module.exports = {
 	 * @method newCollection
 	 * 新建专题
 	 */
-	newCollection : function(req, res, next) {
+	newCollection: function(req, res, next) {
 		var body = req.body;
 		var name = xss(body.name);
 		var description = xss(body.description);
@@ -116,11 +124,12 @@ module.exports = {
 			if (err) {
 				return next(err);
 			}
-			if (user.collLimitNum === user.collNum) {// 用户创建的专题数已经到达限制数，不能再创建
+			// 用户创建的专题数已经到达限制数，不能再创建
+			if (user.collLimitNum === user.collNum) {
 				return res.json({
-					r : 1,
-					errcode : 10013,
-					msg : ERRCODE[10013]
+					r: 1,
+					errcode: 10013,
+					msg: ERRCODE[10013]
 				});
 			} else {
 				Collection.newCollection(name, description, sourceUrl, mThumbnailUrl, sThumbnailUrl, tags, belongToUserId, function(err, collection) {
@@ -128,9 +137,9 @@ module.exports = {
 						return next(err);
 					}
 					return res.json({
-						r : 0,
-						msg : '新建专题成功',
-						collection : collection
+						r: 0,
+						msg: '新建专题成功',
+						collection: collection
 					});
 				});
 			}
@@ -141,7 +150,7 @@ module.exports = {
 	 * @method findAllMyCollections
 	 * 我创建的所有专题,并且返回是否订阅信息
 	 */
-	findAllMyCollections : function(req, res, next) {
+	findAllMyCollections: function(req, res, next) {
 		var userId = auth.getUserId(req, res);
 
 		Collection.findAllByUserId(userId, function(err, collections) {
@@ -154,16 +163,16 @@ module.exports = {
 				}
 				var len = collections.length;
 				for (var i = 0; i < len; i++) {
-					if (ids.indexOf(String(collections[i]._id)) !== -1) {// 说明订阅了该专题
+					if (ids.indexOf(String(collections[i]._id)) !== -1) { // 说明订阅了该专题
 						collections[i].hasSub = true;
 					} else {
 						collections[i].hasSub = false;
 					}
 				}
 				return res.json({
-					r : 0,
-					msg : "查询我创建的所有专题成功",
-					collections : collections
+					r: 0,
+					msg: "查询我创建的所有专题成功",
+					collections: collections
 				});
 			});
 		});
@@ -173,7 +182,7 @@ module.exports = {
 	 * @method subCollection
 	 * 订阅专题
 	 */
-	subCollection : function(req, res, next) {
+	subCollection: function(req, res, next) {
 		var userId = auth.getUserId(req, res);
 		var collectionId = req.params._id;
 
@@ -181,11 +190,11 @@ module.exports = {
 			if (err) {
 				return next(err);
 			}
-			if (doc) {// 已订阅
+			if (doc) { // 已订阅
 				return res.json({
-					r : 1,
-					errcode : 10014,
-					msg : ERRCODE[10014]
+					r: 1,
+					errcode: 10014,
+					msg: ERRCODE[10014]
 				});
 			} else {
 				CollectionSub.newCollectionSub(userId, collectionId, function(err, collectionSub) {
@@ -193,8 +202,8 @@ module.exports = {
 						return next(err);
 					}
 					return res.json({
-						r : 0,
-						msg : '订阅成功'
+						r: 0,
+						msg: '订阅成功'
 					});
 				});
 			}
@@ -205,7 +214,7 @@ module.exports = {
 	 * @method unSubCollection
 	 * 取消订阅专题(根据用户Id和专题Id)
 	 */
-	unSubCollection : function(req, res, next) {
+	unSubCollection: function(req, res, next) {
 		var userId = auth.getUserId(req, res);
 		var collectionId = req.params._id;
 
@@ -216,9 +225,9 @@ module.exports = {
 
 			if (!doc) {
 				return res.json({
-					r : 1,
-					errcode : 10015,
-					msg : ERRCODE[10015]
+					r: 1,
+					errcode: 10015,
+					msg: ERRCODE[10015]
 				});
 			} else {
 				CollectionSub.removeOneCollectionSub(userId, collectionId, function(err, doc) {
@@ -226,8 +235,8 @@ module.exports = {
 						return next(err);
 					}
 					res.json({
-						r : 0,
-						msg : '取消订阅成功'
+						r: 0,
+						msg: '取消订阅成功'
 					});
 				});
 			}
@@ -238,7 +247,7 @@ module.exports = {
 	 * @method findAllMyCollectionSubs
 	 * 我订阅的所有专题
 	 */
-	findAllMyCollectionSubs : function(req, res, next) {
+	findAllMyCollectionSubs: function(req, res, next) {
 		var userId = auth.getUserId(req, res);
 
 		CollectionSub.findAllSubsByUserId(userId, function(err, subs) {
@@ -252,9 +261,9 @@ module.exports = {
 				collections.push(subs[i].collectionId);
 			}
 			return res.json({
-				r : 0,
-				msg : '查询我订阅的所有专题成功',
-				collections : collections
+				r: 0,
+				msg: '查询我订阅的所有专题成功',
+				collections: collections
 			})
 		});
 	},
@@ -263,14 +272,14 @@ module.exports = {
 	 * @method findCollectionsByKey
 	 * 根据关键字搜索所有专题
 	 */
-	findCollectionsByKey : function(req, res, next) {
+	findCollectionsByKey: function(req, res, next) {
 		var isLogin = auth.isLogin(req, res);
 		var query = req.query;
 		var pageSize = query.pageSize || 12;
 		var pageStart = query.pageStart || 0;
 		var key = query.key;
 
-		if (isLogin) {// 如果用户已登录
+		if (isLogin) { // 如果用户已登录
 			var userId = auth.getUserId(req, res);
 
 			CollectionSub.findAllByUserId(userId, function(err, ids) {
@@ -284,30 +293,30 @@ module.exports = {
 					}
 					var len = collections.length;
 					for (var i = 0; i < len; i++) {
-						if (ids.indexOf(String(collections[i]._id)) !== -1) {// 说明订阅了该专题
+						if (ids.indexOf(String(collections[i]._id)) !== -1) { // 说明订阅了该专题
 							collections[i].hasSub = true;
 						} else {
 							collections[i].hasSub = false;
 						}
 					}
 					res.json({
-						r : 0,
-						msg : "查询专题成功",
-						collections : collections,
-						count : count
+						r: 0,
+						msg: "查询专题成功",
+						collections: collections,
+						count: count
 					});
 				});
 			});
-		} else {// 用户未登录
+		} else { // 用户未登录
 			Collection.findByKey(pageSize, pageStart, key, function(err, collections, count) {
 				if (err) {
 					return next(err);
 				}
 				res.json({
-					r : 0,
-					msg : "查询专题成功",
-					collections : collections,
-					count : count
+					r: 0,
+					msg: "查询专题成功",
+					collections: collections,
+					count: count
 				});
 			});
 		}
@@ -317,7 +326,7 @@ module.exports = {
 	 * @method findAllCollectionsByUserId
 	 * 根据用户Id查找某用户创建的所有专题
 	 */
-	findAllCollectionsByUserId : function(req, res, next) {
+	findAllCollectionsByUserId: function(req, res, next) {
 		var userId = req.params._id;
 
 		Collection.findAllByUserId(userId, function(err, collections) {
@@ -325,9 +334,9 @@ module.exports = {
 				return next(err);
 			}
 			return res.json({
-				r : 0,
-				msg : "查找某用户创建的所有专题成功",
-				collections : collections
+				r: 0,
+				msg: "查找某用户创建的所有专题成功",
+				collections: collections
 			});
 		});
 	},
@@ -336,7 +345,7 @@ module.exports = {
 	 * @method findAllMyCollectionsWith
 	 * 我创建的所有专题，并且返回当前文章是否已经收录信息
 	 */
-	findAllMyCollectionsWith : function(req, res, next) {
+	findAllMyCollectionsWith: function(req, res, next) {
 		var userId = auth.getUserId(req, res);
 		var articleId = req.query.articleId;
 
@@ -345,7 +354,6 @@ module.exports = {
 			if (err) {
 				return next(err);
 			}
-
 			// 查询某篇文章被收录的所有专题
 			ArticleColl.findAllCollectionsByArticleId(articleId, function(err, articleColls) {
 				if (err) {
@@ -363,9 +371,9 @@ module.exports = {
 				}
 
 				res.json({
-					r : 0,
-					msg : '查询成功',
-					collections : collections
+					r: 0,
+					msg: '查询成功',
+					collections: collections
 				});
 			});
 
@@ -376,7 +384,7 @@ module.exports = {
 	 * @method addArticle
 	 * 收录文章
 	 */
-	addArticle : function(req, res, next) {
+	addArticle: function(req, res, next) {
 		var articleId = req.params._id;
 		var collectionId = req.body.collectionId;
 
@@ -386,9 +394,9 @@ module.exports = {
 			}
 			if (articleColl) {
 				return res.json({
-					r : 1,
-					errcode : 10019,
-					msg : ERRCODE[10019]
+					r: 1,
+					errcode: 10019,
+					msg: ERRCODE[10019]
 				});
 			} else {
 				ArticleColl.newArticleColl(articleId, collectionId, function(err, articleColl) {
@@ -396,9 +404,9 @@ module.exports = {
 						return next(err);
 					}
 					return res.json({
-						r : 0,
-						msg : "收录成功",
-						articleColl : articleColl
+						r: 0,
+						msg: "收录成功",
+						articleColl: articleColl
 					});
 				});
 			}
@@ -409,7 +417,7 @@ module.exports = {
 	 * @method removeArticle
 	 * 取消收录文章
 	 */
-	removeArticle : function(req, res, next) {
+	removeArticle: function(req, res, next) {
 		var articleId = req.params._id;
 		var collectionId = req.body.collectionId;
 
@@ -424,18 +432,42 @@ module.exports = {
 						return next(err);
 					}
 					return res.json({
-						r : 0,
-						msg : "取消收录成功",
-						articleColl : articleColl
+						r: 0,
+						msg: "取消收录成功",
+						articleColl: articleColl
 					});
 				});
 			} else {
 				return res.json({
-					r : 1,
-					errcode : 10020,
-					msg : ERRCODE[10020]
+					r: 1,
+					errcode: 10020,
+					msg: ERRCODE[10020]
 				});
 			}
 		});
+	},
+
+	/**
+	 * @method findUsersByCollectionIdAndPage
+	 * 分页查询某个专题下的订阅用户
+	 */
+	findUsersByCollectionIdAndPage: function(req, res, next) {
+		var collectionId = req.params._id;
+		var pageSize = Number(req.query.pageSize) || 20;
+		var pageStart = Number(req.query.pageStart) || 0;
+		var sortBy = '-createTime';
+
+		CollectionSub.findByCollectionIdAndPage(collectionId, pageSize, pageStart, sortBy, function(err, users) {
+			if (err) {
+				return next(err);
+			}
+			return res.json({
+				r: 0,
+				msg: "查询订阅用户成功",
+				users: users
+			});
+		});
 	}
+
+
 };

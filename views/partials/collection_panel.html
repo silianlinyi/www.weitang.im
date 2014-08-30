@@ -1,0 +1,49 @@
+<div class="four wide column">
+	<div class="ui red header">
+		<img class="ui rounded small image" src="{{collection.sThumbnailUrl}}" width="80" height="64">
+		<a href="/collections/{{collection._id}}">{{collection.name}}</a>
+		<div class="sub header">
+			{{collection.description}}
+		</div>
+	</div>
+	<div class="ui horizontal bulleted list">
+		<a class="item" href="/collections/{{collection._id}}">
+			{{collection.articlesNum}} 篇文章
+		</a>
+		<a class="item" href="/collections/{{collection._id}}/subscribers">
+			{{collection.subscriptionsNum}} 人订阅
+		</a>
+	</div>
+	<div class="ui small buttons">
+		{{! 用户已登录 }}
+		{{#if hasLogin}}
+		{{#if collection.hasSub}}
+		<div class="ui button red unSubBtn" data-id="{{collection._id}}">
+			<i class="icon checkmark"></i>正在订阅
+		</div>
+		{{else}}
+		<div class="ui button subBtn" data-id="{{collection._id}}">
+			<i class="icon add"></i>添加订阅
+		</div>
+		{{/if}}
+		<!--<div class="or"></div>
+		<div class="ui button contributeBtn">
+			<i class="icon Cloud Upload"></i>投稿
+		</div>-->
+		<!-- 用户未登录 -->
+		{{else}}
+		<div class="ui button notLogin">
+			<i class="icon add"></i>添加订阅
+		</div>
+		<!--<div class="or"></div>
+		<div class="ui button notLogin">
+			<i class="icon cloud upload"></i>投稿
+		</div>-->
+		{{/if}}
+	</div>
+	<p class="metadata">
+		专题主编：<a href="/users/{{collection.belongToUserId._id}}">
+			{{collection.belongToUserId.nickname}}
+		</a>
+	</p>
+</div>

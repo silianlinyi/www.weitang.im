@@ -1,7 +1,9 @@
+var Article = require('../models/Article');
 var ArticleComment = require('../models/ArticleComment');
-var Article = require('./article');
 
 module.exports = {
+
+	// -------------------------------------------------- 新建操作
 
 	/**
 	 * @method newComment
@@ -29,15 +31,20 @@ module.exports = {
 			if (err) {
 				return callback(err, null);
 			}
+			// 触发器1：关联文章的评论个数+1
 			Article.updateCommentsNum(articleId, 1, function(err, article) {
 				if (err) {
 					return callback(err, null);
 				}
-				ArticleComment.findById(comment._id).populate('userId', '_id nickname sHeadimgurl').exec(callback);
+				var query = ArticleComment.findById(comment._id);
+				query.populate('userId', '_id nickname sHeadimgurl');
+				query.exec(callback);
 			});
 		});
 	},
-	
+
+	// -------------------------------------------------- 删除操作
+
 	/**
 	 * @method removeOne
 	 * 删除一条文章评论
@@ -47,6 +54,7 @@ module.exports = {
 			if (err) {
 				return callback(err, null);
 			}
+			// 触发器1：关联文章的评论个数-1
 			Article.updateCommentsNum(comment.articleId, -1, function(err, article) {
 				if (err) {
 					return callback(err, null);
@@ -56,15 +64,7 @@ module.exports = {
 		});
 	},
 
-	/**
-	 * @method findById
-	 * 根据评论Id查找
-	 */
-	findById: function(_id, callback) {
-		var query = ArticleComment.findById(_id);
-		query.populate('userId', '_id nickname sHeadimgurl');
-		query.exec(callback);
-	},
+	// -------------------------------------------------- 查询操作
 
 	/**
 	 * @method findByArticleIdAndPage

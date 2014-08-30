@@ -1,6 +1,15 @@
 var Article = require('../models/Article');
+var ArticleColl = require('../models/ArticleColl');
+var ArticleComment = require('../models/ArticleComment');
+var ArticleLike = require('../models/ArticleLike');
+var Notebook = require('../models/Notebook');
+var User = require('../models/User');
+
+var ArticleLikeProxy = require('./articleLike');
 
 module.exports = {
+
+	// -------------------------------------------------- 新建操作
 
 	/**
 	 * 新建文章
@@ -15,12 +24,54 @@ module.exports = {
 		article.save(callback);
 	},
 
+	// -------------------------------------------------- 删除操作
+
 	/**
 	 * @method deleteArticleById
 	 * 根据文章Id删除某篇文章
 	 */
 	deleteArticleById: function(articleId, callback) {
-		Article.findByIdAndRemove(articleId, callback);
+		Article.findByIdAndRemove(articleId, function(err, article) {
+			if (err) {
+				return callback(err, null);
+			}
+			// 触发器1：删除该文章相关的所有收录记录
+			ArticleColl.removeAllByArticleId(articleId, function(err, articleColls) {
+				if (err) {
+					return callback(err, null);
+				}
+				// 触发器2：删除与该文章相关的所有评论记录
+				ArticleComment.removeAllByArticleId(articleId, function(err, comments) {
+					if (err) {
+						return callback(err, null);
+					}
+					// 触发器3：删除与该文章相关的所有喜欢记录
+					ArticleLikeProxy.removeAllByArticleId(articleId, function(err, likes) {
+						if (err) {
+							return callback(err, null);
+						}
+						// 触发器4：
+						if (article.status === 0) { // 草稿
+							return callback(null, article);
+						} else { // 已发布
+							// 文章所在文集的文集数-1
+							Notebook.updateArticlesNum(article.belongToNotebookId, -1, function(err, notebook) {
+								if (err) {
+									return callback(err, null);
+								}
+								// 文章作者字数减去所删文章的字数
+								User.updateWordsNum(article.belongToUserId, -article.wordsNum, function(err, user) {
+									if (err) {
+										return callback(err, null);
+									}
+									return callback(null, article);
+								});
+							});
+						}
+					});
+				});
+			});
+		});
 	},
 
 	/**
@@ -32,6 +83,8 @@ module.exports = {
 			belongToNotebookId: notebookId
 		}, callback);
 	},
+
+	// -------------------------------------------------- 查询操作
 
 	/**
 	 * @method findArticleById
@@ -64,6 +117,7 @@ module.exports = {
 	},
 
 	/**
+	 * @method findAllPublishedByNotebookId
 	 * 查询某个文集下的所有文章（已发布）
 	 */
 	findAllPublishedByNotebookId: function(belongToNotebookId, callback) {
@@ -72,6 +126,8 @@ module.exports = {
 			status: 1
 		}).sort('-createTime').exec(callback);
 	},
+
+	// -------------------------------------------------- 更新操作
 
 	/**
 	 * @method updateArticleById
@@ -89,76 +145,11 @@ module.exports = {
 		}, callback);
 	},
 
-	/**
-	 * 发布 / 取消发布文章
-	 */
 	updateStatus: function(_id, status, callback) {
-		Article.findByIdAndUpdate(_id, {
-			$set: {
-				status: status
-			}
-		}, callback);
+		Article.updateStatus(_id, status, callback);
 	},
 
-	/**
-	 * @method updateViewsNum
-	 * 更新文章被查看次数
-	 */
-	updateViewsNum: function(_id, num, callback) {
-		Article.findByIdAndUpdate(_id, {
-			$inc: {
-				viewsNum: num
-			}
-		}, callback);
-	},
 
-	/**
-	 * @method updateLikesNum
-	 * 更新文章喜欢次数
-	 */
-	updateLikesNum: function(_id, num, callback) {
-		Article.findByIdAndUpdate(_id, {
-			$inc: {
-				likesNum: num
-			}
-		}, callback);
-	},
-
-	/**
-	 * @method updateCommentsNum
-	 * 更新文章评论个数
-	 */
-	updateCommentsNum: function(_id, num, callback) {
-		Article.findByIdAndUpdate(_id, {
-			$inc: {
-				commentsNum: num
-			}
-		}, callback);
-	},
-
-	/**
-	 * @method addBelongToCollectionIds
-	 * 收录文章时，往belongToCollectionIds数组添加一个collectionId
-	 */
-	addBelongToCollectionIds: function(_id, collectionId, callback) {
-		Article.findByIdAndUpdate(_id, {
-			$addToSet: {
-				belongToCollectionIds: collectionId
-			}
-		}, callback);
-	},
-
-	/**
-	 * @method pullBelongToCollectionIds
-	 * 取消收录文章时，删除belongToCollectionIds数组中对应的一个collectionId
-	 */
-	pullBelongToCollectionIds: function(_id, collectionId, callback) {
-		Article.findByIdAndUpdate(_id, {
-			$pull: {
-				belongToCollectionIds: collectionId
-			}
-		}, callback);
-	},
 
 	/**
 	 * @method findByUserIdAndPage

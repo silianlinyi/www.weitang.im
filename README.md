@@ -1,3 +1,7 @@
+## 上线部署
+
+* 1. 数据库执行db.wt_article_views.ensureIndex({"ctime":1},{"expireAfterSecs":60*60*24})
+
 ## 一、用户模块User
 【用户表：User】
 

@@ -1,11 +1,12 @@
 require.config({
-	paths : {
-		"iAlert" : "../common/iAlert",
-		"Util" : "../common/util"
+	paths: {
+		"iAlert": "../common/iAlert",
+		"Util": "../common/util",
+		"User": "./user"
 	}
 });
 
-define(['iAlert', 'Util'], function(iAlert, Util) {
+define(['iAlert', 'Util', 'User'], function(iAlert, Util, User) {
 
 	var $articleList = $('#articleList');
 	var $loadMore = $('#loadMore');
@@ -25,7 +26,7 @@ define(['iAlert', 'Util'], function(iAlert, Util) {
 		if (len !== 0) {
 			temp += '<i class="grid layout black small icon"></i>';
 			for (var i = 0; i < len; i++) {
-				temp += '<a class="collections" href="/collections/' + belongToCollectionIds[i]._id + '">' + belongToCollectionIds[i].name + '</a>';
+				temp += '<a class="collections" href="/collections/' + belongToCollectionIds[i]._id + '">' + belongToCollectionIds[i].name + '</a>&nbsp;&nbsp;';
 			}
 			temp += '&nbsp;';
 		}
@@ -45,12 +46,12 @@ define(['iAlert', 'Util'], function(iAlert, Util) {
 
 	function findArticlesByUserIdAndPage(userId, config, callback) {
 		$.ajax({
-			url : '/api/users/' + userId + '/articles',
-			type : 'GET',
-			data : config,
-			dataType : 'json',
-			timeout : 15000,
-			success : function(data) {
+			url: '/api/users/' + userId + '/articles',
+			type: 'GET',
+			data: config,
+			dataType: 'json',
+			timeout: 15000,
+			success: function(data) {
 				console.log(data);
 				if (data.r === 0) {
 					callback(data);
@@ -63,10 +64,10 @@ define(['iAlert', 'Util'], function(iAlert, Util) {
 	}
 
 	var config = {
-		pageSize : 15,
-		pageStart : 0,
-		status : 1,
-		sortBy : '-createTime'
+		pageSize: 15,
+		pageStart: 0,
+		status: 1,
+		sortBy: '-createTime'
 	};
 
 	findArticlesByUserIdAndPage(globalNS.u._id, config, function(data) {

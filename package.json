@@ -8,6 +8,7 @@
   "dependencies": {
     "body-parser": "~1.0.0",
     "ccap": "^0.4.3",
+    "compression": "^1.0.11",
     "connect-mongostore": "^0.1.1",
     "cookie-parser": "~1.0.1",
     "debug": "~0.7.4",

@@ -160,6 +160,7 @@
 			</div>
 			<!-- 评论 -->
 			<div class="ui bottom attached inverted teal basic segment tabItem hide" data-id="3">
+				{{#if hasLogin}}
 				<div class="ui form" style="width: 60%;">
 					<div class="field">
 						<textarea style="height: 50px;" id="commentContent"></textarea>
@@ -170,6 +171,11 @@
 						</div>
 					</div>
 				</div>
+				{{else}}
+				<div class="ui button small notLogin">登录发表评论</div>
+				<div class="ui divider"></div>
+				{{/if}}
+				
 				<div class="ui comments"></div>
 				<a href="javascript:void(0);" style="color: #fff;text-decoration: none;padding-left: 35px;display: none;" id="loadMoreComments">
 					查看更多<i class="icon double angle down"></i>

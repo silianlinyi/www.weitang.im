@@ -7,7 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="/css/semantic.css" />
 		<link rel="stylesheet" type="text/css" href="/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="/css/common2.css" />
-
+		
 		<script>
 			var GNS = {
 				u: {
@@ -27,14 +27,14 @@
 					<a class="item" href="/users/{{u._id}}/subscriptions">
 						订阅({{totalSubNum}})
 					</a>
-					<a class="active item" href="/users/{{u._id}}/following">
+					<a class="item" href="/users/{{u._id}}/following">
 						关注({{u.followingNum}})
 					</a>
-					<a class="item" href="/users/{{u._id}}/followers">
+					<a class="active item" href="/users/{{u._id}}/followers">
 						粉丝({{u.followersNum}})
 					</a>
 				</div>
-				<div class="ui divided list followingList" id="followingList"></div>
+				<div class="ui divided list followerList" id="followerList"></div>
 				<div class="ui header black center aligned loadMore" id="loadMore">
 					加载更多
 				</div>
@@ -45,9 +45,11 @@
 		<script src="/lib/jquery.js"></script>
 		<script src="/lib/semantic.js"></script>
 		<script src="/lib/jquery.qrcode.min.js"></script>
-		<script data-main="/js/following" src="/lib/require.js"></script>
-
-		{{#if hasLogin }} {{else}} {{> login_modal }} {{/if}}
+		<script data-main="/js/followers" src="/lib/require.js"></script>
+		
+		{{#if hasLogin }}
+		{{else}}
+		{{> login_modal }}
+		{{/if}}
 	</body>
-
 </html>

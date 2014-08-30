@@ -5,7 +5,7 @@ module.exports = {
 
 	/**
 	 * @method newCollection
-	 * 新建专题，用户已创建的专题数+1
+	 * 新建专题
 	 */
 	newCollection : function(name, description, sourceUrl, mThumbnailUrl, sThumbnailUrl, tags, belongToUserId, callback) {
 		var collection = new Collection({
@@ -21,7 +21,7 @@ module.exports = {
 			if (err) {
 				return callback(err, null);
 			}
-			// TODO 新建专题成功后，新建一条动态消息，用于后台数据分析
+			// 触发器1：用户已创建专题数+1
 			User.updateCollNum(belongToUserId, 1, function(err, user) {
 				if (err) {
 					return callback(err, null);
@@ -114,17 +114,6 @@ module.exports = {
 				mThumbnailUrl : mThumbnailUrl,
 				sThumbnailUrl : sThumbnailUrl,
 				tags : tags
-			}
-		}, callback);
-	},
-
-	/**
-	 * 修改专题下的文章数
-	 */
-	updateArticlesNum : function(_id, num, callback) {
-		Collection.findByIdAndUpdate(_id, {
-			$inc : {
-				articlesNum : num
 			}
 		}, callback);
 	},

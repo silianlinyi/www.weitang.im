@@ -29,4 +29,18 @@ var ArticleCommentSchema = new Schema({
 	}
 });
 
+ArticleCommentSchema.statics = {
+
+	/**
+	 * @method removeAllByArticleId
+	 * 根据文章Id删除与该文章相关的所有评论记录
+	 */
+	removeAllByArticleId: function(articleId, callback) {
+		this.remove({
+			articleId: articleId
+		}, callback);
+	}
+
+};
+
 module.exports = mongoose.model("ArticleComment", ArticleCommentSchema, "wt_article_comments");

@@ -40,7 +40,7 @@ define(['iAlert', 'URL'], function(iAlert, URL) {
 		} else {
 			var temp = '<a class="item" href="/write#/notebook/' + notebook._id + '" data-id="' + notebook._id + '">';
 		}
-		temp += '<i class="trash icon"></i><i class="edit icon"></i><i class="book icon"></i>';
+		temp += '<i class="edit icon"></i><i class="book icon"></i>';
 		temp += '<div class="content ellipsis" title="' + notebook.name + '">' + notebook.name + '</div></a>';
 		return temp;
 	}
@@ -72,7 +72,6 @@ define(['iAlert', 'URL'], function(iAlert, URL) {
 					window.location.href = '/write#/notebook/' + notebook._id;
 					var temp = notebookItem(notebook, true);
 					$notebooks.prepend($(temp));
-					iAlert(data.msg);
 				} else {
 					iAlert(data.msg);
 					return;
@@ -185,7 +184,7 @@ define(['iAlert', 'URL'], function(iAlert, URL) {
 	$('.left .notebooks').on('click', '.edit', function() {
 		var $item = $(this).parents('.item');
 		var notebookId = $item.attr('data-id');
-		$('#updateNotebookModal').find('input').val('');
+		$('#updateNotebookModal').find('input').val($item.find('.content').html());
 		$('#updateNotebookModal').modal({
 			onApprove : function() {
 				var name = $(this).find('input').val().trim();

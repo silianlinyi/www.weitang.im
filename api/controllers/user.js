@@ -98,78 +98,73 @@ module.exports = {
 	 * Web页面
 	 * -------------------------------------------
 	 */
-	// 我的主页 - 关注
-	showFollowing: function(req, res) {
-		var userId = req.params._id;
-		// url中的用户Id
-		var isLogin = auth.isLogin(req, res);
-		var isMyself = false;
-		if (isLogin) {
-			var curUserId = auth.getUserId(req, res);
-			// 当前会话用户的Id
-			isMyself = (userId === String(curUserId) ? true : false);
-		}
-
-		User.findUserById(userId, function(err, user) {
-			if (err) {
-				return next(err);
-			}
-			Notebook.findAllByUserIdAnd(userId, function(err, notebooks) {
-				if (err) {
-					return next(err);
-				}
-				Collection.findAllByUserIdAnd(userId, function(err, collections) {
-					if (err) {
-						return next(err);
-					}
-					res.render('following', {
-						u: user,
-						isMyself: isMyself,
-						notebooks: notebooks,
-						collections: collections
-					});
-				});
-			});
-		});
-	},
-
-	// 我的主页 - 粉丝
-	showFollowers: function(req, res) {
-
-	},
 
 	/**
-	 * 我的主页 - 最新文章
+	 * 用户主页
 	 */
-	showLatestArticles: function(req, res, next) {
-		var userId = req.params._id;
+	showUserInfo: function(req, res, next) {
 		// url中的用户Id
+		var userId = req.params._id;
 		var isLogin = auth.isLogin(req, res);
 		var isMyself = false;
+		var hasFollow = false; // 是否已经关注用户
+		var curUserId;
 		if (isLogin) {
-			var curUserId = auth.getUserId(req, res);
 			// 当前会话用户的Id
+			curUserId = auth.getUserId(req, res);
 			isMyself = (userId === String(curUserId) ? true : false);
 		}
-
+		var path = req.route.path;
 		User.findUserById(userId, function(err, user) {
 			if (err) {
 				return next(err);
 			}
-			Notebook.findAllByUserIdAnd(userId, function(err, notebooks) {
+			Notebook.findAllByUserId(userId, function(err, notebooks) {
 				if (err) {
 					return next(err);
 				}
-				Collection.findAllByUserIdAnd(userId, function(err, collections) {
+				Collection.findAllByUserId(userId, function(err, collections) {
 					if (err) {
 						return next(err);
 					}
-					res.render('latestArticles', {
-						u: user,
-						isMyself: isMyself,
-						notebooks: notebooks,
-						collections: collections
-					});
+
+					function cb() {
+						var params = {
+							u: user,
+							totalSubNum: user.subNum + user.subNotebooksNum,
+							isMyself: isMyself,
+							hasFollow: hasFollow,
+							notebooks: notebooks,
+							collections: collections
+						};
+
+						if (/latestArticles/.test(path)) { // 如果请求的是用户 - 最新文章页
+							res.render('latestArticles', params);
+						} else if (/following/.test(path)) { // 如果请求的是用户 - 关注页
+							res.render('following', params);
+						} else if (/followers/.test(path)) { // 如果请求的是用户 - 粉丝页
+							res.render('followers', params);
+						} else if(/subscriptions/.test(path)) {
+							res.render('subscriptions', params);
+						} else if (/favourites/.test (path)) {
+							res.render('favourites', params);
+						} else {
+							res.render('latestArticles', params); // 默认用户 - 最新文章页
+						}
+					}
+					if (!isMyself) { // 不是我自己，还需判断是否关注该用户
+						UserRelation.findOne(curUserId, userId, function(err, doc) {
+							if (err) {
+								return next(err);
+							}
+							if (doc) {
+								hasFollow = true;
+							}
+							cb();
+						});
+					} else {
+						cb();
+					}
 				});
 			});
 		});
@@ -424,9 +419,115 @@ module.exports = {
 		});
 	},
 
+	/**
+	 * @method newUserRelation
+	 * 关注用户
+	 */
+	followingUser: function(req, res, next) {
+		var followingId = auth.getUserId(req, res); // 发起关注方用户Id
+		var followerId = req.params._id; // 被关注者用户Id
+
+		UserRelation.findOne(followingId, followerId, function(err, doc) {
+			if (err) {
+				return next(err);
+			}
+			if (doc) { // 说明用户已关注
+				return res.json({
+					r: 1,
+					errcode: 10023,
+					msg: ERRCODE[10023]
+				});
+			} else {
+				UserRelation.newOne(followingId, followerId, function(err, doc) {
+					if (err) {
+						return next(err);
+					}
+					return res.json({
+						r: 0,
+						msg: "关注成功"
+					});
+				});
+			}
+		});
+	},
+
+	/**
+	 * @method unFollowingUser
+	 * 取消关注用户
+	 */
+	unFollowingUser: function(req, res, next) {
+		var followingId = auth.getUserId(req, res); // 发起关注方用户Id
+		var followerId = req.params._id; // 被关注者用户Id
+
+		UserRelation.findOne(followingId, followerId, function(err, doc) {
+			if (err) {
+				return next(err);
+			}
+			if (!doc) { // 取消关注失败，您未关注该用户
+				return res.json({
+					r: 1,
+					errcode: 10024,
+					msg: ERRCODE[10024]
+				});
+			} else {
+				UserRelation.removeOne(followingId, followerId, function(err, doc) {
+					if (err) {
+						return next(err);
+					}
+					return res.json({
+						r: 0,
+						msg: "取消关注成功"
+					});
+				});
+			}
+		});
+	},
+
+	/**
+	 * @method findFollowingsByPage
+	 * 分页查询用户的关注
+	 */
+	findFollowingsByPage: function(req, res, next) {
+		var followingId = req.params._id;
+		var pageSize = req.query.pageSize || 20;
+		var pageStart = req.query.pageStart || 0;
+
+		UserRelation.findFollowingsByPage(followingId, pageSize, pageStart, function(err, docs) {
+			if (err) {
+				return next(err);
+			}
+			return res.json({
+				r: 0,
+				msg: "查询关注成功",
+				users: docs
+			});
+		});
+	},
+
+	/**
+	 * @method findFollowersByPage
+	 * 分页查询用户的粉丝
+	 */
+	findFollowersByPage: function(req, res, next) {
+		var followerId = req.params._id;
+		var pageSize = req.query.pageSize || 20;
+		var pageStart = req.query.pageStart || 0;
+
+		UserRelation.findFollowersByPage(followerId, pageSize, pageStart, function(err, docs) {
+			if (err) {
+				return next(err);
+			}
+			return res.json({
+				r: 0,
+				msg: "查询粉丝成功",
+				users: docs
+			});
+		});
+	},
+
 	// 根据用户昵称搜索用户
 	findUsersByNickname: function(req, res, next) {
-		
+
 	},
 
 	// 分页查询所有用户
@@ -444,15 +545,8 @@ module.exports = {
 
 	},
 
-	// 关注用户
-	followingUser: function(req, res) {
 
-	},
 
-	// 取消关注用户
-	unFollowingUser: function(req, res) {
-
-	},
 
 	// 根据用户Id更新用户信息
 	updateUserById: function(req, res) {

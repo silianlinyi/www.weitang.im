@@ -9,9 +9,9 @@ module.exports = {
 	 * 查询某个用户订阅的所有专题（专题Id列表数组）
 	 * @param {Function} callback 回调函数
 	 */
-	findAllByUserId : function(userId, callback) {
+	findAllByUserId: function(userId, callback) {
 		CollectionSub.find({
-			userId : userId
+			userId: userId
 		}, function(err, collectionSubs) {
 			if (err) {
 				return callback(err, null);
@@ -33,10 +33,10 @@ module.exports = {
 	 * @param {String} collectionId 关联专题Id
 	 * @param {Function} callback 回调函数
 	 */
-	newCollectionSub : function(userId, collectionId, callback) {
+	newCollectionSub: function(userId, collectionId, callback) {
 		var collectionSub = new CollectionSub({
-			userId : userId,
-			collectionId : collectionId
+			userId: userId,
+			collectionId: collectionId
 		});
 		collectionSub.save(function(err, collectionSub) {
 			if (err) {
@@ -60,10 +60,10 @@ module.exports = {
 	 * @method findOne
 	 * 根据用户Id和专题Id查找记录，如果结果不为空，说明已订阅该专题，如果结果为空，说明没有订阅该专题
 	 */
-	findOne : function(userId, collectionId, callback) {
+	findOne: function(userId, collectionId, callback) {
 		CollectionSub.findOne({
-			userId : userId,
-			collectionId : collectionId
+			userId: userId,
+			collectionId: collectionId
 		}, callback);
 	},
 
@@ -72,10 +72,10 @@ module.exports = {
 	 * 取消订阅专题
 	 * 删除一条订阅记录，订阅用户对应的专题订阅数-1，被订阅专题对应的总订阅数-1
 	 */
-	removeOneCollectionSub : function(userId, collectionId, callback) {
+	removeOneCollectionSub: function(userId, collectionId, callback) {
 		CollectionSub.findOneAndRemove({
-			userId : userId,
-			collectionId : collectionId
+			userId: userId,
+			collectionId: collectionId
 		}, function(err, collectionSub) {
 			if (err) {
 				return callback(err, null);
@@ -97,9 +97,34 @@ module.exports = {
 	/**
 	 * 我订阅的所有专题
 	 */
-	findAllSubsByUserId : function(userId, callback) {
+	findAllSubsByUserId: function(userId, callback) {
 		CollectionSub.find({
-			userId : userId
+			userId: userId
 		}).populate('collectionId').exec(callback);
+	},
+
+	/**
+	 * @method findByCollectionIdAndPage
+	 * 分页查询某个专题下的订阅用户
+	 */
+	findByCollectionIdAndPage: function(collectionId, pageSize, pageStart, sortBy, callback) {
+		var query = CollectionSub.find({
+			collectionId: collectionId
+		}).limit(pageSize).skip(pageStart).sort(sortBy);
+		query.populate('userId', '_id nickname sHeadimgurl followingNum followersNum articlesNum notebooksNum wordsNum');
+		query.exec(function(err, docs) {
+			if (err) {
+				return callback(err, null);
+			}
+			var len = docs.length;
+			var ret = [];
+			for (var i = 0; i < len; i++) {
+				ret.push(docs[i].userId);
+			}
+			return callback(null, ret);
+		});
 	}
+
+
+
 };

@@ -3,36 +3,29 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-		<title>{{collection.name}} | 微糖</title>
+		<title>{{notebook.name}} | 微糖</title>
 		<link rel="stylesheet" type="text/css" href="/css/semantic.min.css" />
 		<link rel="stylesheet" type="text/css" href="/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="/css/common2.css" />
-		<link rel="stylesheet" type="text/css" href="/css/collectionInfo.css" />
-		<script>
-			var GNS = {
-				collection: {
-					_id: "{{collection._id}}"
-				}
-			};
-		</script>
+		<link rel="stylesheet" href="/css/notebook.css" />
 	</head>
 	<body>
-
 		{{> menu }}
-
 		<div class="ui grid">
-			{{> collection_panel }}
+			{{> notebook_panel }}
 			<div class="nine wide column">
 				<div class="ui secondary red pointing menu">
-					<a class="active item" href="/collections/{{collection._id}}">
-						最新收录文章
-					</a>
+					<a class="active item" href="/notebooks/{{notebook._id}}">目录</a>
 				</div>
 				<div class="ui divided list articleList" id="articleList">
-					
-				</div>
-				<div class="ui header black center aligned loadMore" id="loadMore">
-					加载更多
+					{{#each articles}}
+					<div class="item">
+						<div class="content">
+							<a class="ui black header" href="/articles/{{_id}}">{{title}}</a>
+							{{intro}}
+						</div>
+					</div>
+					{{/each}}
 				</div>
 			</div>
 		</div>
@@ -41,10 +34,12 @@
 		<script src="/lib/jquery.min.js"></script>
 		<script src="/lib/semantic.js"></script>
 		<script src="/lib/jquery.qrcode.min.js"></script>
-		<script data-main="/js/collectionInfo" src="/lib/require.js"></script>
+		<script data-main="/js/notebookInfo" src="/lib/require.js"></script>
 
-		{{#if hasLogin }} {{else}} {{> login_modal }} {{/if}}
+		{{#if hasLogin }}
+		{{else}}
+		{{> login_modal }}
+		{{/if}}
 
 	</body>
-
 </html>
