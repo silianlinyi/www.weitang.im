@@ -66,11 +66,11 @@ define(['iAlert', 'Util', 'area'], function(iAlert, Util, area) {
 			},
 			'UploadComplete' : function() {
 				//队列文件处理完毕后,处理相关的事情
-				console.log('UploadComplete')
+				console.log('UploadComplete');
 			},
 			'Error' : function(up, err, errTip) {
 				//上传出错时,处理相关的事情
-				console.log('Error')
+				console.log('Error');
 			}
 		}
 	});

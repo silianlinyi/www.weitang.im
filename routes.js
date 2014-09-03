@@ -32,20 +32,21 @@ router.get('/*', function(req, res, next) {
 
 // 首页
 router.get('/', site.showIndex);
+// 登录
+router.get('/signIn', user.showSignIn);
 // 注册
 router.get('/signUp', user.showSignUp);
 // 注册成功
 router.get('/registerSucc', user.showRegisterSucc);
-// 登录
-router.get('/signIn', user.showSignIn);
 // 专题 - 我的订阅
-router.get('/collections/sub', auth.pageAuth, collection.showSub);
+router.get('/collections/sub', auth.pageAuth, collection.showMySubCollections);
 // 专题 - 我的专题
-router.get('/collections/mine', auth.pageAuth, collection.showMine);
+router.get('/collections/mine', auth.pageAuth, collection.showMyCollections);
 // 专题 - 新建专题
-router.get('/collections/new', auth.pageAuth, collection.showNew);
+router.get('/collections/new', auth.pageAuth, collection.showNewCollection);
 // 专题 - 全部专题
 router.get('/collections', collection.showCollections);
+// --------------------------------------------------------------
 // 专题详情 - 最新文章
 router.get('/collections/:_id', collection.showCollectionInfo);
 // 专题 - 订阅用户

@@ -11,13 +11,13 @@ define(['iAlert'], function(iAlert) {
 		return this.filter(function(element) {
 			return element !== itemToRemove;
 		});
-	}
+	};
 	var uploader = Qiniu.uploader({
 		runtimes : 'html5,flash,html4',
 		browse_button : 'pickfiles',
 		uptoken_url : '/api/qiniu/uptoken',
 		unique_names : true,
-		domain : QINIU_Domain,
+		domain : GNS.QINIU_Domain,
 		container : 'container',
 		max_file_size : '4mb',
 		flash_swf_url : '../plupload/Moxie.swf',
@@ -77,11 +77,11 @@ define(['iAlert'], function(iAlert) {
 			},
 			'UploadComplete' : function() {
 				//队列文件处理完毕后,处理相关的事情
-				console.log('UploadComplete')
+				console.log('UploadComplete');
 			},
 			'Error' : function(up, err, errTip) {
 				//上传出错时,处理相关的事情
-				console.log('Error')
+				console.log('Error');
 			}
 		}
 	});

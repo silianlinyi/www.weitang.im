@@ -12,6 +12,7 @@ module.exports = {
 	// -------------------------------------------------- 新建操作
 
 	/**
+	 * @method newArticle
 	 * 新建文章
 	 */
 	newArticle: function(title, content, belongToUserId, belongToNotebookId, callback) {
@@ -64,7 +65,13 @@ module.exports = {
 									if (err) {
 										return callback(err, null);
 									}
-									return callback(null, article);
+									// 关联用户的文章数-1
+									User.updateArticlesNum(article.belongToUserId, -1, function(err, user) {
+										if (err) {
+											return callback(err, null);
+										}
+										return callback(null, article);
+									});
 								});
 							});
 						}
@@ -72,16 +79,6 @@ module.exports = {
 				});
 			});
 		});
-	},
-
-	/**
-	 * @method deleteAllByNotebookId
-	 * 删除某个文集下的所有文章
-	 */
-	deleteAllByNotebookId: function(notebookId, callback) {
-		Article.remove({
-			belongToNotebookId: notebookId
-		}, callback);
 	},
 
 	// -------------------------------------------------- 查询操作
@@ -99,6 +96,7 @@ module.exports = {
 	},
 
 	/**
+	 * @method findArticlesByTitle
 	 * 根据文章名查询
 	 */
 	findArticlesByTitle: function(title, callback) {
@@ -108,6 +106,7 @@ module.exports = {
 	},
 
 	/**
+	 * @method findAllByNotebookId
 	 * 查询某个文集下的所有文章
 	 */
 	findAllByNotebookId: function(belongToNotebookId, callback) {
@@ -145,11 +144,64 @@ module.exports = {
 		}, callback);
 	},
 
+	/**
+	 * @method updateStatus
+	 * 发布 / 取消发布文章
+	 */
 	updateStatus: function(_id, status, callback) {
-		Article.updateStatus(_id, status, callback);
+		Article.findByIdAndUpdate(_id, {
+			$set: {
+				status: status
+			}
+		}, function(err, article) {
+			if (err) {
+				return callback(err, null);
+			}
+			if (status === 0) { //草稿
+				// 触发器1：关联用户的文章数-1
+				User.updateArticlesNum(article.belongToUserId, -1, function(err, user) {
+					if (err) {
+						return callback(err, null);
+					}
+					// 触发器2:关联用户的总字数wordsNum减去文章字数
+					User.updateWordsNum(article.belongToUserId, -article.wordsNum, function(err, user) {
+						if (err) {
+							return callback(err, null);
+						}
+						// 触发器3：关联文集的文章数-1
+						Notebook.updateArticlesNum(article.belongToNotebookId, -1, function(err, notebook) {
+							if (err) {
+								return callback(err, null);
+							}
+							return callback(null, article);
+						});
+					});
+				});
+			} else if (status === 1) { // 已发布
+				// 触发器1：关联用户的文章数+1
+				User.updateArticlesNum(article.belongToUserId, 1, function(err, user) {
+					if (err) {
+						return callback(err, null);
+					}
+					// 触发器2:关联用户的总字数wordsNum加上文章字数
+					User.updateWordsNum(article.belongToUserId, article.wordsNum, function(err, user) {
+						if (err) {
+							return callback(err, null);
+						}
+						// 触发器3：关联文集的文章数+1
+						Notebook.updateArticlesNum(article.belongToNotebookId, 1, function(err, notebook) {
+							if (err) {
+								return callback(err, null);
+							}
+							return callback(null, article);
+						});
+					});
+				});
+			}
+		});
 	},
 
-
+	// -------------------------------------------------- 查询操作
 
 	/**
 	 * @method findByUserIdAndPage

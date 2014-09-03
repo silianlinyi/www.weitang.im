@@ -93,7 +93,7 @@ module.exports = {
 					if (counter === len) {
 						return callback(null, articleLikes);
 					}
-				})
+				});
 			}
 		});
 	},

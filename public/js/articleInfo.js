@@ -103,9 +103,10 @@ define(['iAlert', 'Util'], function(iAlert, Util) {
 					if (data.r === 0) {
 						var collections = data.collections;
 						var len = collections.length;
+						var html;
 						if (len !== 0) {
 							for (var i = 0; i < len; i++) {
-								var html = '<div class="item" data-id="' + collections[i]._id + '" data-hasAdd="' + collections[i].hasAdd + '">';
+								html = '<div class="item" data-id="' + collections[i]._id + '" data-hasAdd="' + collections[i].hasAdd + '">';
 								if (collections[i].hasAdd) {
 									html += '<a class="right floated cancel" title="取消收录">取消</a>';
 								} else {
@@ -118,7 +119,7 @@ define(['iAlert', 'Util'], function(iAlert, Util) {
 								$('.myCollections .list').append($(html));
 							}
 						} else {
-							var html = '<div class="ui red header">您还未创建过任何专题，不能收录！马上去创建一个？</div>';
+							html = '<div class="ui red header">您还未创建过任何专题，不能收录！马上去创建一个？</div>';
 							html += '<a class="ui button mini green" href="/collections/new" style="color:#fff;" target="_blank">马上创建</a>';
 							$('.myCollections .list').append($(html));
 						}

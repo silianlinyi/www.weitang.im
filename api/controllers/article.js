@@ -153,19 +153,33 @@ module.exports = {
 		var wordsNum = Number(body.wordsNum);
 		var diffNum = Number(body.diffNum);
 
-		Article.updateArticleById(articleId, title, content, intro, wordsNum, function(err, article) {
+		Article.findArticleById(articleId, function(err, oldArticle) {
 			if (err) {
 				return next(err);
 			}
-			User.updateWordsNum(article.belongToUserId, diffNum, function(err, user) {
+			Article.updateArticleById(articleId, title, content, intro, wordsNum, function(err, newArticle) {
 				if (err) {
 					return next(err);
 				}
-				return res.json({
-					r: 0,
-					msg: "更新文章成功",
-					article: article
-				});
+				if (newArticle.status === 0) { // 草稿
+					return res.json({
+						r: 0,
+						msg: "更新文章成功",
+						article: newArticle
+					});
+				} else if (newArticle.status === 1) { // 已发布
+					// 触发器1：关联用户的字数需要修改
+					User.updateWordsNum(newArticle.belongToUserId, newArticle.wordsNum - oldArticle.wordsNum, function(err, user) {
+						if (err) {
+							return next(err);
+						}
+						return res.json({
+							r: 0,
+							msg: "更新文章成功",
+							article: newArticle
+						});
+					});
+				}
 			});
 		});
 	},
@@ -461,4 +475,4 @@ module.exports = {
 	findMonthlyByPage: function(req, res) {
 
 	}
-}
+};

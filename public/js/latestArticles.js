@@ -32,7 +32,7 @@ define(['iAlert', 'Util', 'User'], function(iAlert, Util, User) {
 		}
 		temp += '<a href="/articles/' + article._id + '#comments" target="_blank">';
 		temp += '<i class="icon black chat outline"></i>' + article.commentsNum + '</a>&nbsp;';
-		temp += '<a class="like-icon-button"><i class="heart empty black icon"></i>' + article.likesNum + '</a>&nbsp;'
+		temp += '<a class="like-icon-button"><i class="heart empty black icon"></i>' + article.likesNum + '</a>&nbsp;';
 		temp += '<i class="icon small black time"></i>' + Util.convertDate(article.createTime);
 		temp += '</div></div>';
 		$articleList.append($(temp));

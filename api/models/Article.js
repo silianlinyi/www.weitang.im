@@ -80,19 +80,7 @@ ArticleSchema.methods = {
 
 // 添加静态方法
 ArticleSchema.statics = {
-	
-	/**
-	 * @method updateStatus
-	 * 发布 / 取消发布文章
-	 */
-	updateStatus: function(_id, status, callback) {
-		this.findByIdAndUpdate(_id, {
-			$set: {
-				status: status
-			}
-		}, callback);
-	},
-	
+
 	/**
 	 * @method updateViewsNum
 	 * 更新文章被查看次数
@@ -104,7 +92,7 @@ ArticleSchema.statics = {
 			}
 		}, callback);
 	},
-	
+
 	/**
 	 * @method updateLikesNum
 	 * 更新文章喜欢次数
@@ -116,7 +104,7 @@ ArticleSchema.statics = {
 			}
 		}, callback);
 	},
-	
+
 	/**
 	 * @method updateCommentsNum
 	 * 更新文章评论个数
@@ -128,10 +116,12 @@ ArticleSchema.statics = {
 			}
 		}, callback);
 	},
-	
+
 	/**
 	 * @method addBelongToCollectionIds
 	 * 收录文章时，往belongToCollectionIds数组添加一个collectionId
+	 * @param {String} _id 文章Id
+	 * @param {String} collectionId 专题Id
 	 */
 	addBelongToCollectionIds: function(_id, collectionId, callback) {
 		this.findByIdAndUpdate(_id, {
@@ -140,7 +130,7 @@ ArticleSchema.statics = {
 			}
 		}, callback);
 	},
-	
+
 	/**
 	 * @method pullBelongToCollectionIds
 	 * 取消收录文章时，删除belongToCollectionIds数组中对应的一个collectionId

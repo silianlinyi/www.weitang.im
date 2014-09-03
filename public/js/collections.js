@@ -9,7 +9,7 @@ define(['Collection', 'iAlert'], function(Collection, iAlert) {
 
 	var offset = $('.ui.action.input').offset();
 	var width = $('.ui.action.input input').width() + 20;
-	var height = $('.ui.action.input').height()
+	var height = $('.ui.action.input').height();
 	var left = offset.left;
 	var top = offset.top + height;
 
@@ -134,7 +134,7 @@ define(['Collection', 'iAlert'], function(Collection, iAlert) {
 			} else {
 				$suggests.show();
 				for (var i = 0; i < len; i++) {
-					var html = '<li><a href="/collections/' + collections[i]._id + '" target="_blank">' + collections[i].name + '</a></li>'
+					var html = '<li><a href="/collections/' + collections[i]._id + '" target="_blank">' + collections[i].name + '</a></li>';
 					$suggests.append($(html));
 				}
 			}

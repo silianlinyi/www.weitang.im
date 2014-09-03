@@ -53,7 +53,7 @@ define(['iAlert', 'Util'], function(iAlert, Util) {
 
 	// 取消
 	$('.cancel.button').on('click', function() {
-		window.history.back()
+		window.history.back();
 	});
 
 });

@@ -1,6 +1,6 @@
 require.config({
-	paths : {
-		"Util" : "../common/util"
+	paths: {
+		"Util": "../common/util"
 	}
 });
 
@@ -17,7 +17,7 @@ define(['Util'], function(Util) {
 
 	bg.onload = function() {
 		ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-	}
+	};
 	setTimeout(function() {
 		window.location.href = '/';
 	}, 3000);

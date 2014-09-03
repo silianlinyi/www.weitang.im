@@ -9,8 +9,12 @@ define(['iAlert'], function(iAlert) {
 	function renderOne(article) {
 		var temp = '<li><div class="article">';
 		temp += '<a href="/articles/' + article._id + '" class="ui left floated header" target="_blank">' + article.title + '</a>';
-		temp += '<a href="/users/' + article.belongToUserId._id + '/latestArticles">';
-		temp += '<img src="' + article.belongToUserId.sHeadimgurl + '" data-content="' + article.belongToUserId.nickname + '" data-variation="inverted" data-position="bottom center" class="circular right floated mini ui image">';
+		temp += '<a href="/users/' + article.belongToUserId._id + '">';
+		if (article.belongToUserId.sHeadimgurl) {
+			temp += '<img src="' + article.belongToUserId.sHeadimgurl + '" data-content="' + article.belongToUserId.nickname + '" data-variation="inverted" data-position="bottom center" class="circular right floated mini ui image">';		
+		} else {
+			temp += '<img src="/img/default_avatar.png" data-content="' + article.belongToUserId.nickname + '" data-variation="inverted" data-position="bottom center" class="circular right floated mini ui image">';
+		}
 		temp += '</a><br class="clearfix" />';
 		temp += '<a href="/articles/' + article._id + '" class="content" target="_blank">' + article.intro + '</a>';
 		temp += '<div class="article-info">';

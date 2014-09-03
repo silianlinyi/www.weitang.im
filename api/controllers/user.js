@@ -98,6 +98,20 @@ module.exports = {
 	 * Web页面
 	 * -------------------------------------------
 	 */
+	// 注册
+	showSignUp: function(req, res) {
+		res.render('signUp');
+	},
+
+	// 注册成功
+	showRegisterSucc: function(req, res) {
+		res.render('registerSucc');
+	},
+
+	// 登录
+	showSignIn: function(req, res) {
+		res.render('signIn');
+	},
 
 	/**
 	 * 用户主页
@@ -178,21 +192,6 @@ module.exports = {
 	// 我的主页 - 热门文章
 	showTopArticles: function(req, res) {
 
-	},
-
-	// 注册
-	showSignUp: function(req, res) {
-		res.render('signUp');
-	},
-
-	// 注册成功
-	showRegisterSucc: function(req, res) {
-		res.render('registerSucc');
-	},
-
-	// 登录
-	showSignIn: function(req, res) {
-		res.render('signIn');
 	},
 
 	showFavourites: function(req, res) {
@@ -334,7 +333,7 @@ module.exports = {
 				msg: "查找用户详情成功",
 				user: user
 			});
-		})
+		});
 	},
 
 	/**

@@ -34,10 +34,10 @@ module.exports = {
 			} else {
 				var isLogin = auth.isLogin(req, res);
 
-				function cb() {
+				var cb = function() {
 					var params = {
 						notebook: notebook
-					}
+					};
 					if (/subscribers/.test(path)) {
 						res.render('subscribersOfNotebook', params);
 					} else {
@@ -49,7 +49,7 @@ module.exports = {
 							res.render('notebookInfo', params);
 						});
 					}
-				}
+				};
 				if (isLogin) {
 					var userId = auth.getUserId(req, res);
 					// 已登录的用户需要判断是否已经订阅该文集

@@ -84,7 +84,7 @@ module.exports = {
 	findFollowingsByPage: function(followingId, pageSize, pageStart, callback) {
 		var query = UserRelation.find({
 			followingId: followingId
-		}).limit(pageSize).skip(pageStart).sort('-createTime')
+		}).limit(pageSize).skip(pageStart).sort('-createTime');
 		query.populate('followerId', '_id nickname sHeadimgurl followingNum followersNum articlesNum notebooksNum wordsNum');
 		query.exec(function(err, docs) {
 			if (err) {
@@ -106,8 +106,8 @@ module.exports = {
 	findFollowersByPage: function(followerId, pageSize, pageStart, callback) {
 		var query = UserRelation.find({
 			followerId: followerId
-		}).limit(pageSize).skip(pageStart).sort('-createTime')
-		query.populate('followingId', '_id nickname sHeadimgurl followingNum followersNum articlesNum notebooksNum wordsNum')
+		}).limit(pageSize).skip(pageStart).sort('-createTime');
+		query.populate('followingId', '_id nickname sHeadimgurl followingNum followersNum articlesNum notebooksNum wordsNum');
 		query.exec(function(err, docs) {
 			if (err) {
 				return callback(err, null);

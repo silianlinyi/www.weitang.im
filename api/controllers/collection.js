@@ -15,26 +15,26 @@ module.exports = {
 	 */
 
 	/**
-	 * @method showSub
+	 * @method showMySubCollections
 	 * 专题 - 我的订阅
 	 */
-	showSub: function(req, res) {
+	showMySubCollections: function(req, res) {
 		res.render('mySubCollections');
 	},
 
 	/**
-	 * @method showMine
+	 * @method showMyCollections
 	 * 专题 - 我的专题
 	 */
-	showMine: function(req, res) {
+	showMyCollections: function(req, res) {
 		res.render('myCollections');
 	},
 
 	/**
-	 * @method showNew
+	 * @method showNewCollection
 	 * 专题 - 新建专题
 	 */
-	showNew: function(req, res) {
+	showNewCollection: function(req, res) {
 		res.render('newCollection', {
 			QINIU_Domain: config.QINIU_Domain
 		});
@@ -68,7 +68,7 @@ module.exports = {
 				} else {
 					var isLogin = auth.isLogin(req, res);
 
-					function cb() {
+					var cb = function() {
 						var params = {
 							r: 0,
 							msg: "查找专题详情成功",
@@ -80,7 +80,7 @@ module.exports = {
 						} else {
 							res.render('collectionInfo', params);
 						}
-					}
+					};
 
 					if (isLogin) {
 						var userId = auth.getUserId(req, res);
@@ -264,7 +264,7 @@ module.exports = {
 				r: 0,
 				msg: '查询我订阅的所有专题成功',
 				collections: collections
-			})
+			});
 		});
 	},
 

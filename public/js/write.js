@@ -35,10 +35,11 @@ define(['iAlert', 'URL'], function(iAlert, URL) {
 
 	// 返回文集Item模板
 	function notebookItem(notebook, active) {
+		var temp;
 		if (active) {
-			var temp = '<a class="active item" href="/write#/notebook/' + notebook._id + '" data-id="' + notebook._id + '">';
+			temp = '<a class="active item" href="/write#/notebook/' + notebook._id + '" data-id="' + notebook._id + '">';
 		} else {
-			var temp = '<a class="item" href="/write#/notebook/' + notebook._id + '" data-id="' + notebook._id + '">';
+			temp = '<a class="item" href="/write#/notebook/' + notebook._id + '" data-id="' + notebook._id + '">';
 		}
 		temp += '<i class="edit icon"></i><i class="book icon"></i>';
 		temp += '<div class="content ellipsis" title="' + notebook.name + '">' + notebook.name + '</div></a>';
@@ -128,11 +129,12 @@ define(['iAlert', 'URL'], function(iAlert, URL) {
 	findAllNotebooks(function() {
 		var parsedObj = URL.parse(window.location.href);
 		var hash = parsedObj.hash.slice(2);
+		var notebookId;
 
 		if (hash === "") {// 写文章默认Url地址
 			var $firstNotebook = $($('.left .notebooks .item')[0]);
 			$firstNotebook.addClass('active');
-			var notebookId = $firstNotebook.attr('data-id');
+			notebookId = $firstNotebook.attr('data-id');
 			findAllArticleByNotebookId(notebookId, function(articles) {
 				if (articles.length !== 0) {
 					var $firstArticle = $($('.middle .articles .item')[0]);
@@ -146,10 +148,10 @@ define(['iAlert', 'URL'], function(iAlert, URL) {
 			});
 		} else {
 			var hashArr = hash.split("/");
-			if (hashArr.length === 2) {// 选中了某个文集
-				var notebookId = hashArr[1];
-				var $activeNotebookItem = $('.left .notebooks .item[data-id="' + notebookId + '"]');
+			notebookId = hashArr[1];
+			var $activeNotebookItem = $('.left .notebooks .item[data-id="' + notebookId + '"]');
 				$activeNotebookItem.addClass('active');
+			if (hashArr.length === 2) {// 选中了某个文集
 				findAllArticleByNotebookId(notebookId, function(articles) {
 					if (articles.length !== 0) {
 						var $firstArticle = $($('.middle .articles .item')[0]);
@@ -162,10 +164,7 @@ define(['iAlert', 'URL'], function(iAlert, URL) {
 					}
 				});
 			} else if (hashArr.length === 4) {// 选中了某个文集并且选中了某篇文章
-				var notebookId = hashArr[1];
 				var articleId = hashArr[3];
-				var $activeNotebookItem = $('.left .notebooks .item[data-id="' + notebookId + '"]');
-				$activeNotebookItem.addClass('active');
 				findAllArticleByNotebookId(notebookId, function(articles) {
 					if (articles.length !== 0) {
 						var $activeArticleItem = $('.middle .articles .item[data-id="' + articleId + '"]');
@@ -247,7 +246,7 @@ define(['iAlert', 'URL'], function(iAlert, URL) {
 	// 返回文章Item模板
 	function articleItem(notebookId, article) {
 		var temp = '<a class="item" href="/write#/notebook/' + notebookId + '/article/' + article._id + '" data-id="' + article._id + '">';
-		temp += '<i class="trash icon"></i><i class="setting icon"></i><i class="file large icon"></i>';
+		temp += '<i class="trash icon"></i><!--<i class="setting icon"></i>--><i class="file large icon"></i>';
 		temp += '<div class="content">';
 		temp += '<div class="header ellipsis">' + article.title + '</div>';
 		if (!article.intro) {
@@ -348,7 +347,7 @@ define(['iAlert', 'URL'], function(iAlert, URL) {
 							iAlert(data.msg);
 							$('.notebooks .active.item').click();
 							var notebookId = $('.notebooks .active.item').attr('data-id');
-							window.location.href = '/write#/notebook/' + notebookId
+							window.location.href = '/write#/notebook/' + notebookId;
 							$item.remove();
 						} else {
 							iAlert(data.msg);

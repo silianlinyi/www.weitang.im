@@ -94,6 +94,6 @@ define('Collection',['iAlert'], function(iAlert) {
 
 	return {
 		render : render
-	}
+	};
 
 });

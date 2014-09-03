@@ -25,7 +25,11 @@
 		<div class="ui page grid main">
 			<div class="three wide column left">
 				<a href="/users/{{article.belongToUserId._id}}">
-					<img class="circular ui small right floated image" src="{{article.belongToUserId.sHeadimgurl}}">
+					{{#if article.belongToUserId.sHeadimgurl}}
+					<img class="circular ui small right floated image" src="{{article.belongToUserId.sHeadimgurl}}">					
+					{{else}}
+					<img class="circular ui small right floated image" src="/img/default_avatar.png">
+					{{/if}}
 				</a>
 				<div class="ui right aligned header">
 					<a href="/users/{{article.belongToUserId._id}}">

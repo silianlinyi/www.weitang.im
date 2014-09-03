@@ -197,7 +197,19 @@ UserSchema.methods = {
 
 // 添加静态方法
 UserSchema.statics = {
-
+	
+	/**
+	 * @method updateArticlesNum
+	 * 修改用户文章总数
+	 */
+	updateArticlesNum : function(_id, num, callback) {
+		this.findByIdAndUpdate(_id, {
+			$inc : {
+				articlesNum : num
+			}
+		}, callback);
+	},
+	
 	/**
 	 * @method updateLikesNum
 	 * 修改喜欢的文章数

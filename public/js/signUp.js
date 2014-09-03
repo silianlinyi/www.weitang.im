@@ -113,5 +113,6 @@ define(['Util'], function(Util) {
 		} else {
 			$signUpBtn.removeClass('disabled');
 		}
-	})
+	});
+	
 });

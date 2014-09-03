@@ -26,8 +26,6 @@ var ArticleCollSchema = new Schema({
 	}
 });
 
-
-
 // 类方法
 ArticleCollSchema.statics = {
 
